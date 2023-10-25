@@ -61,6 +61,22 @@ static PB_SmartKnobConfig configs[] = {
     {
         0,
         0,
+        6,
+        0,
+        20,
+        8.225806452 * PI / 120,
+        2,
+        1,
+        1.1,
+        "SKDEMO_Shades",
+        0,
+        {},
+        0,
+        200,
+    },
+    {
+        0,
+        0,
         0,
         0,
         -1, // max position < min position indicates no bounds
