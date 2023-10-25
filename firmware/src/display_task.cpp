@@ -362,6 +362,37 @@ void DisplayTask::run()
         spr_.drawBitmap(center + icon_margin, TFT_HEIGHT - 30, fire, icon_size, icon_size, DISABLED_COLOR, TFT_BLACK);
         spr_.drawBitmap(center + icon_size + icon_margin * 3, TFT_HEIGHT - 30, wind, icon_size, icon_size, DISABLED_COLOR, TFT_BLACK);
       }
+      else if (strncmp(state.config.text, "SKDEMO_Shades", 13) == 0)
+      {
+        spr_.fillRect(0, 0, TFT_WIDTH, TFT_HEIGHT, spr_.color565(150, 150, 150));
+        int32_t height = (state.current_position - state.config.min_position) * TFT_HEIGHT / (state.config.max_position - state.config.min_position);
+        spr_.fillRect(0, 0, TFT_WIDTH, height, spr_.color565(0, 0, 0));
+        spr_.setFreeFont(&Roboto_Light_60);
+        char buf_[6];
+
+        if (state.current_position == 0)
+        {
+          sprintf(buf_, "%s", "Opened");
+        }
+        else if (state.current_position == 10)
+        {
+          sprintf(buf_, "%s", "Half");
+        }
+        else if (state.current_position == 20)
+        {
+          sprintf(buf_, "%s", "Closed");
+        }
+        else
+        {
+          sprintf(buf_, "%d%%", state.current_position * 5);
+        }
+
+        spr_.drawString(buf_, TFT_WIDTH / 2, TFT_HEIGHT / 2, 1);
+
+        // spr_.drawNumber(state.current_position, TFT_WIDTH / 2, TFT_HEIGHT / 2, 1);
+        spr_.setFreeFont(&Roboto_Thin_24);
+        spr_.drawString("Bedroom shade", TFT_WIDTH / 2, TFT_HEIGHT / 2 - DESCRIPTION_Y_OFFSET - VALUE_OFFSET, 1);
+      }
       else if (strncmp(state.config.text, "SKDEMO_Speed", 12) == 0)
       {
         spr_.fillRect(0, 0, TFT_WIDTH, TFT_HEIGHT, spr_.color565(0, 0, 150));
