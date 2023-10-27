@@ -437,6 +437,10 @@ void DisplayTask::run()
           spr_.drawString(buf_, TFT_WIDTH / 2 + (RADIUS - 15) * cosf(max_number_position), TFT_HEIGHT / 2 - (RADIUS - 15) * sinf(max_number_position), 1);
         }
 
+        uint32_t snowflake_color = DISABLED_COLOR;
+        uint32_t fire_color = DISABLED_COLOR;
+        uint32_t wind_color = DISABLED_COLOR;
+
         // set the moving dot color
         uint32_t dot_color = TFT_WHITE;
         if (state.current_position < current_temp)
@@ -447,37 +451,6 @@ void DisplayTask::run()
         {
           dot_color = heating_color;
         }
-
-        // draw moving dot
-        if (num_positions > 0 && ((state.current_position == state.config.min_position && state.sub_position_unit < 0) || (state.current_position == state.config.max_position && state.sub_position_unit > 0)))
-        {
-
-          spr_.fillCircle(TFT_WIDTH / 2 + (RADIUS - 10) * cosf(raw_angle), TFT_HEIGHT / 2 - (RADIUS - 10) * sinf(raw_angle), 5, dot_color);
-          if (raw_angle < adjusted_angle)
-          {
-            for (float r = raw_angle; r <= adjusted_angle; r += 2 * PI / 180)
-            {
-              spr_.fillCircle(TFT_WIDTH / 2 + (RADIUS - 10) * cosf(r), TFT_HEIGHT / 2 - (RADIUS - 10) * sinf(r), 2, dot_color);
-            }
-            spr_.fillCircle(TFT_WIDTH / 2 + (RADIUS - 10) * cosf(adjusted_angle), TFT_HEIGHT / 2 - (RADIUS - 10) * sinf(adjusted_angle), 2, dot_color);
-          }
-          else
-          {
-            for (float r = raw_angle; r >= adjusted_angle; r -= 2 * PI / 180)
-            {
-              spr_.fillCircle(TFT_WIDTH / 2 + (RADIUS - 10) * cosf(r), TFT_HEIGHT / 2 - (RADIUS - 10) * sinf(r), 2, dot_color);
-            }
-            spr_.fillCircle(TFT_WIDTH / 2 + (RADIUS - 10) * cosf(adjusted_angle), TFT_HEIGHT / 2 - (RADIUS - 10) * sinf(adjusted_angle), 2, dot_color);
-          }
-        }
-        else
-        {
-          spr_.fillCircle(TFT_WIDTH / 2 + (RADIUS - 10) * cosf(adjusted_angle), TFT_HEIGHT / 2 - (RADIUS - 10) * sinf(adjusted_angle), 5, dot_color);
-        }
-
-        uint32_t snowflake_color = DISABLED_COLOR;
-        uint32_t fire_color = DISABLED_COLOR;
-        uint32_t wind_color = DISABLED_COLOR;
 
         // TODO check for positions
         float range_radians = (state.config.max_position - state.config.min_position + 1) * state.config.position_width_radians;
@@ -496,7 +469,7 @@ void DisplayTask::run()
 
           for (float r = start_angle; r >= wanted_angle; r -= 2 * PI / 180)
           {
-            spr_.fillCircle(TFT_WIDTH / 2 + (RADIUS - 10) * cosf(r), TFT_HEIGHT / 2 - (RADIUS - 10) * sinf(r), 5, dot_color);
+            spr_.fillCircle(TFT_WIDTH / 2 + (RADIUS - 10) * cosf(r), TFT_HEIGHT / 2 - (RADIUS - 10) * sinf(r), 10, dot_color);
           }
         }
         else if (state.current_position == current_temp)
@@ -504,6 +477,22 @@ void DisplayTask::run()
           spr_.setTextColor(TFT_WHITE);
           status = "idle";
           wind_color = TFT_GREENYELLOW;
+
+          // draw arc of action
+
+          float start_angle = left_bound - (range_radians / num_positions) * (current_temp - state.config.min_position);
+          float wanted_angle = left_bound - (range_radians / num_positions) * (state.current_position - state.config.min_position) - adjusted_sub_position;
+
+          if (adjusted_sub_position < 0)
+          {
+            start_angle = left_bound - (range_radians / num_positions) * (state.current_position - state.config.min_position) - adjusted_sub_position;
+            wanted_angle = left_bound - (range_radians / num_positions) * (current_temp - state.config.min_position);
+          }
+
+          for (float r = start_angle; r >= wanted_angle; r -= 2 * PI / 180)
+          {
+            spr_.fillCircle(TFT_WIDTH / 2 + (RADIUS - 10) * cosf(r), TFT_HEIGHT / 2 - (RADIUS - 10) * sinf(r), 10, TFT_GREENYELLOW);
+          }
         }
         else
         {
@@ -518,9 +507,37 @@ void DisplayTask::run()
 
           for (float r = start_angle; r <= wanted_angle; r += 2 * PI / 180)
           {
-            spr_.fillCircle(TFT_WIDTH / 2 + (RADIUS - 10) * cosf(r), TFT_HEIGHT / 2 - (RADIUS - 10) * sinf(r), 5, dot_color);
+            spr_.fillCircle(TFT_WIDTH / 2 + (RADIUS - 10) * cosf(r), TFT_HEIGHT / 2 - (RADIUS - 10) * sinf(r), 10, dot_color);
           }
         }
+
+        // draw moving dot
+        // if (num_positions > 0 && ((state.current_position == state.config.min_position && state.sub_position_unit < 0) || (state.current_position == state.config.max_position && state.sub_position_unit > 0)))
+        // {
+
+        //   spr_.fillCircle(TFT_WIDTH / 2 + (RADIUS - 10) * cosf(raw_angle), TFT_HEIGHT / 2 - (RADIUS - 10) * sinf(raw_angle), 5, dot_color);
+        //   if (raw_angle < adjusted_angle)
+        //   {
+        //     for (float r = raw_angle; r <= adjusted_angle; r += 2 * PI / 180)
+        //     {
+        //       spr_.fillCircle(TFT_WIDTH / 2 + (RADIUS - 10) * cosf(r), TFT_HEIGHT / 2 - (RADIUS - 10) * sinf(r), 2, dot_color);
+        //     }
+        //     spr_.fillCircle(TFT_WIDTH / 2 + (RADIUS - 10) * cosf(adjusted_angle), TFT_HEIGHT / 2 - (RADIUS - 10) * sinf(adjusted_angle), 2, dot_color);
+        //   }
+        //   else
+        //   {
+        //     for (float r = raw_angle; r >= adjusted_angle; r -= 2 * PI / 180)
+        //     {
+        //       spr_.fillCircle(TFT_WIDTH / 2 + (RADIUS - 10) * cosf(r), TFT_HEIGHT / 2 - (RADIUS - 10) * sinf(r), 2, dot_color);
+        //     }
+        //     spr_.fillCircle(TFT_WIDTH / 2 + (RADIUS - 10) * cosf(adjusted_angle), TFT_HEIGHT / 2 - (RADIUS - 10) * sinf(adjusted_angle), 2, dot_color);
+        //   }
+        // }
+        // else
+        // {
+        //   spr_.fillCircle(TFT_WIDTH / 2 + (RADIUS - 10) * cosf(adjusted_angle), TFT_HEIGHT / 2 - (RADIUS - 10) * sinf(adjusted_angle), 5, dot_color);
+        // }
+
         spr_.setFreeFont(&Roboto_Thin_24);
         spr_.drawString(status.c_str(), TFT_WIDTH / 2, TFT_HEIGHT / 2 - DESCRIPTION_Y_OFFSET - VALUE_OFFSET, 1);
 
@@ -665,7 +682,6 @@ void DisplayTask::run()
           spr_.fillCircle(TFT_WIDTH / 2 + (RADIUS - 10) * cosf(adjusted_angle), TFT_HEIGHT / 2 - (RADIUS - 10) * sinf(adjusted_angle), 5, dot_color);
         }
       }
-
       else if (strncmp(state.config.text, "SKDEMO_Light_dimmer", 19) == 0)
       {
 
@@ -673,12 +689,11 @@ void DisplayTask::run()
 
         float left_bound = PI / 2;
         float right_bound = 0;
-        if (num_positions > 0)
-        {
-          float range_radians = (state.config.max_position - state.config.min_position) * state.config.position_width_radians;
-          left_bound = PI / 2;
-          right_bound = PI / 2 - range_radians;
-        }
+        float range_radians = (state.config.max_position - state.config.min_position) * state.config.position_width_radians;
+
+        left_bound = PI / 2;
+        right_bound = PI / 2 - range_radians - state.config.position_width_radians;
+
         float raw_angle = left_bound - (state.current_position - state.config.min_position) * state.config.position_width_radians;
         float adjusted_angle = raw_angle - adjusted_sub_position;
 
@@ -693,10 +708,13 @@ void DisplayTask::run()
 
         uint8_t icon_size = 80;
 
-        uint16_t offset_vertical = 20;
+        uint16_t offset_vertical = 30;
 
         char buf_[4];
         sprintf(buf_, "%d%%", state.current_position);
+
+        float start_angle = left_bound;
+        float wanted_angle = right_bound;
 
         if (state.current_position == 0)
         {
@@ -705,6 +723,13 @@ void DisplayTask::run()
           spr_.setTextColor(off_lamp_color);
           spr_.setFreeFont(&Roboto_Thin_24);
           spr_.drawString("Kitchen", center_h, center_v + icon_size / 2 + 30 - offset_vertical, 1);
+          spr_.drawString("off", center_h, center_v + icon_size / 2 + 60 - offset_vertical, 1);
+
+          // draw dot movong path
+          for (float r = start_angle; r >= wanted_angle; r -= 2 * PI / 180)
+          {
+            spr_.fillCircle(TFT_WIDTH / 2 + (RADIUS - 10) * cosf(r), TFT_HEIGHT / 2 - (RADIUS - 10) * sinf(r), 10, DISABLED_COLOR);
+          }
         }
         else
         {
@@ -714,6 +739,22 @@ void DisplayTask::run()
           spr_.setFreeFont(&Roboto_Thin_24);
           spr_.drawString("Kitchen", center_h, center_v + icon_size / 2 + 30 - offset_vertical, 1);
           spr_.drawString(buf_, center_h, center_v + icon_size / 2 + 60 - offset_vertical, 1);
+
+          // draw dot movong path
+          for (float r = start_angle; r >= wanted_angle; r -= 2 * PI / 180)
+          {
+            spr_.fillCircle(TFT_WIDTH / 2 + (RADIUS - 10) * cosf(r), TFT_HEIGHT / 2 - (RADIUS - 10) * sinf(r), 10, DISABLED_COLOR);
+          }
+
+          wanted_angle = left_bound - (range_radians / num_positions) * (state.current_position - state.config.min_position) - adjusted_sub_position - state.config.position_width_radians;
+          if (wanted_angle < right_bound - state.config.position_width_radians)
+          {
+            wanted_angle = right_bound - state.config.position_width_radians;
+          }
+          for (float r = start_angle; r >= wanted_angle; r -= 2 * PI / 180)
+          {
+            spr_.fillCircle(TFT_WIDTH / 2 + (RADIUS - 10) * cosf(r), TFT_HEIGHT / 2 - (RADIUS - 10) * sinf(r), 10, on_lamp_color);
+          }
         }
 
         // set the moving dot color
@@ -721,34 +762,27 @@ void DisplayTask::run()
 
         if (state.current_position < 1)
         {
-          dot_color = off_lamp_color;
+          dot_color = off_background;
         }
         else
         {
-          dot_color = on_lamp_color;
+          dot_color = on_background;
         }
 
         // draw moving dot
         if (num_positions > 0 && ((state.current_position == state.config.min_position && state.sub_position_unit < 0) || (state.current_position == state.config.max_position && state.sub_position_unit > 0)))
         {
 
-          spr_.fillCircle(TFT_WIDTH / 2 + (RADIUS - 10) * cosf(raw_angle), TFT_HEIGHT / 2 - (RADIUS - 10) * sinf(raw_angle), 5, dot_color);
-          if (raw_angle < adjusted_angle)
+          if (adjusted_angle > left_bound)
           {
-            for (float r = raw_angle; r <= adjusted_angle; r += 2 * PI / 180)
-            {
-              spr_.fillCircle(TFT_WIDTH / 2 + (RADIUS - 10) * cosf(r), TFT_HEIGHT / 2 - (RADIUS - 10) * sinf(r), 2, dot_color);
-            }
-            spr_.fillCircle(TFT_WIDTH / 2 + (RADIUS - 10) * cosf(adjusted_angle), TFT_HEIGHT / 2 - (RADIUS - 10) * sinf(adjusted_angle), 2, dot_color);
+            adjusted_angle = left_bound;
           }
-          else
+          else if (adjusted_angle < right_bound)
           {
-            for (float r = raw_angle; r >= adjusted_angle; r -= 2 * PI / 180)
-            {
-              spr_.fillCircle(TFT_WIDTH / 2 + (RADIUS - 10) * cosf(r), TFT_HEIGHT / 2 - (RADIUS - 10) * sinf(r), 2, dot_color);
-            }
-            spr_.fillCircle(TFT_WIDTH / 2 + (RADIUS - 10) * cosf(adjusted_angle), TFT_HEIGHT / 2 - (RADIUS - 10) * sinf(adjusted_angle), 2, dot_color);
+            adjusted_angle = right_bound;
           }
+
+          spr_.fillCircle(TFT_WIDTH / 2 + (RADIUS - 10) * cosf(adjusted_angle), TFT_HEIGHT / 2 - (RADIUS - 10) * sinf(adjusted_angle), 5, dot_color);
         }
         else
         {
