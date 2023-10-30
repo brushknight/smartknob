@@ -13,4 +13,7 @@
         "cstddef": "cpp",
         "limits": "cpp"
     },
+    "[cpp]": {
+        "editor.defaultFormatter": "ms-vscode.cpptools"
+    },
 }
