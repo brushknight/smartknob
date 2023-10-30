@@ -10,7 +10,7 @@
 #include <Adafruit_VEML7700.h>
 #endif
 
-#include "interface_task.h"
+#include "app_task.h"
 #include "semaphore_guard.h"
 #include "util.h"
 
@@ -26,287 +26,177 @@ HX711 scale;
 Adafruit_VEML7700 veml = Adafruit_VEML7700();
 #endif
 
-static PB_SmartKnobConfig configs[] = {
-    // int32_t position;
-    // float sub_position_unit;
-    // uint8_t position_nonce;
-    // int32_t min_position;
-    // int32_t max_position;
-    // float position_width_radians;
-    // float detent_strength_unit;
-    // float endstop_strength_unit;
-    // float snap_point;
-    // char text[51];
-    // pb_size_t detent_positions_count;
-    // int32_t detent_positions[5];
-    // float snap_point_bias;
-    // int8_t led_hue;
+static AppConfig app_configs[] = {
     {
+        "menu",
         0,
         0,
         0,
+        6,
+        {
+            0,
+            0,
+            0,
+            0,
+            -1, // max position < min position indicates no bounds
+            25 * PI / 180,
+            2,
+            1,
+            0.55,
+            "SKDEMO_Menu",
+            0,
+            {},
+            0,
+            200,
+        },
+    },
+    {
+        "hvac",
+        1,
         0,
-        -1, // max position < min position indicates no bounds
-        45 * PI / 180,
+        0,
+        0,
+        {
+            25,
+            0,
+            25,
+            16,
+            35,
+            8.225806452 * PI / 120,
+            2,
+            1,
+            1.1,
+            "SKDEMO_HVAC",
+            0,
+            {},
+            0,
+            27,
+        },
+    },
+    {
+        "Shades",
         2,
-        1,
-        0.55,
-        "SKDEMO_Menu",
         0,
-        {},
         0,
-        200,
+        0,
+        {
+            15,
+            0,
+            15,
+            0,
+            20,
+            8.225806452 * PI / 120,
+            2,
+            1,
+            1.1,
+            "SKDEMO_Shades",
+            0,
+            {},
+            0,
+            27,
+        },
     },
     {
-        25,
+        "switch on off",
+        3,
         0,
-        25,
-        16,
-        35,
-        8.225806452 * PI / 120,
-        2,
-        1,
-        1.1,
-        "SKDEMO_HVAC",
         0,
-        {},
         0,
-        27,
+        {
+            0,
+            0,
+            0,
+            0,
+            1,
+            60 * PI / 180,
+            1,
+            1,
+            0.55, // Note the snap point is slightly past the midpoint (0.5); compare to normal detents which use a snap point *past* the next value (i.e. > 1)
+            "SKDEMO_Light_switch",
+            0,
+            {},
+            0,
+            27,
+        },
     },
     {
-        15,
+        "light dimmer",
+        4,
         0,
-        15,
         0,
-        20,
-        8.225806452 * PI / 120,
-        2,
-        1,
-        1.1,
-        "SKDEMO_Shades",
         0,
-        {},
-        0,
-        27,
+        {
+            0,
+            0,
+            0,
+            0,
+            100,
+            3.6 / 2 * PI / 180,
+            1,
+            1,
+            1.1,
+            "SKDEMO_Light_dimmer",
+            0,
+            {},
+            0,
+            27,
+        },
     },
     {
+        "Music",
+        5,
         0,
         0,
         0,
-        0,
-        1,
-        60 * PI / 180,
-        1,
-        1,
-        0.55, // Note the snap point is slightly past the midpoint (0.5); compare to normal detents which use a snap point *past* the next value (i.e. > 1)
-        "SKDEMO_Light_switch",
-        0,
-        {},
-        0,
-        27,
+        {
+            0,
+            0,
+            0,
+            0,
+            20,
+            230.0 / 20.0 * PI / 180,
+            1,
+            1,
+            1.1,
+            "SKDEMO_Music",
+            0,
+            {},
+            0,
+            27,
+        },
     },
     {
+        "Settings",
+        6,
         0,
         0,
         0,
-        0,
-        100,
-        3.6 / 2 * PI / 180,
-        1,
-        1,
-        1.1,
-        "SKDEMO_Light_dimmer",
-        0,
-        {},
-        0,
-        27,
-    },
-    // {
-    //     0,
-    //     0,
-    //     0,
-    //     0,
-    //     -1, // max position < min position indicates no bounds
-    //     10 * PI / 180,
-    //     0,
-    //     1,
-    //     1.1,
-    //     "Unbounded\nNo detents",
-    //     0,
-    //     {},
-    //     0,
-    //     200,
-    // },
-    // {
-    //     0,
-    //     0,
-    //     1,
-    //     0,
-    //     10,
-    //     10 * PI / 180,
-    //     0,
-    //     1,
-    //     1.1,
-    //     "Bounded 0-10\nNo detents",
-    //     0,
-    //     {},
-    //     0,
-    //     0,
-    // },
-    // {
-    //     0,
-    //     0,
-    //     2,
-    //     0,
-    //     72,
-    //     10 * PI / 180,
-    //     0,
-    //     1,
-    //     1.1,
-    //     "Multi-rev\nNo detents",
-    //     0,
-    //     {},
-    //     0,
-    //     73,
-    // },
-    // {
-    //     0,
-    //     0,
-    //     3,
-    //     0,
-    //     1,
-    //     60 * PI / 180,
-    //     1,
-    //     1,
-    //     0.55, // Note the snap point is slightly past the midpoint (0.5); compare to normal detents which use a snap point *past* the next value (i.e. > 1)
-    //     "On/off\nStrong detent",
-    //     0,
-    //     {},
-    //     0,
-    //     157,
-    // },
-    // {
-    //     0,
-    //     0,
-    //     4,
-    //     0,
-    //     0,
-    //     60 * PI / 180,
-    //     0.01,
-    //     0.6,
-    //     1.1,
-    //     "Return-to-center",
-    //     0,
-    //     {},
-    //     0,
-    //     45,
-    // },
-    // {
-    //     127,
-    //     0,
-    //     5,
-    //     0,
-    //     255,
-    //     1 * PI / 180,
-    //     0,
-    //     1,
-    //     1.1,
-    //     "Fine values\nNo detents",
-    //     0,
-    //     {},
-    //     0,
-    //     219,
-    // },
-    // {
-    //     127,
-    //     0,
-    //     5,
-    //     0,
-    //     255,
-    //     1 * PI / 180,
-    //     1,
-    //     1,
-    //     1.1,
-    //     "Fine values\nWith detents",
-    //     0,
-    //     {},
-    //     0,
-    //     25,
-    // },
-    // {
-    //     0,
-    //     0,
-    //     6,
-    //     0,
-    //     31,
-    //     8.225806452 * PI / 180,
-    //     2,
-    //     1,
-    //     1.1,
-    //     "Coarse values\nStrong detents",
-    //     0,
-    //     {},
-    //     0,
-    //     200,
-    // },
-    // {
-    //     0,
-    //     0,
-    //     6,
-    //     0,
-    //     31,
-    //     8.225806452 * PI / 180,
-    //     0.2,
-    //     1,
-    //     1.1,
-    //     "Coarse values\nWeak detents",
-    //     0,
-    //     {},
-    //     0,
-    //     0,
-    // },
-    // {
-    //     0,
-    //     0,
-    //     7,
-    //     0,
-    //     31,
-    //     7 * PI / 180,
-    //     2.5,
-    //     1,
-    //     0.7,
-    //     "Magnetic detents",
-    //     4,
-    //     {2, 10, 21, 22},
-    //     0,
-    //     73,
-    // },
-    // {
-    //     0,
-    //     0,
-    //     8,
-    //     -6,
-    //     6,
-    //     60 * PI / 180,
-    //     1,
-    //     1,
-    //     0.55,
-    //     "Return-to-center\nwith detents",
-    //     0,
-    //     {},
-    //     0.4,
-    //     157,
-    // },
-};
+        {
+            0,
+            0,
+            0,
+            0,
+            100,
+            3.6 / 2 * PI / 180,
+            1,
+            1,
+            1.1,
+            "SKDEMO_Settings",
+            0,
+            {},
+            0,
+            27,
+        },
+    }};
 
-InterfaceTask::InterfaceTask(const uint8_t task_core, MotorTask &motor_task, DisplayTask *display_task) : Task("Interface", 3400, 1, task_core),
-                                                                                                          stream_(),
-                                                                                                          motor_task_(motor_task),
-                                                                                                          display_task_(display_task),
-                                                                                                          plaintext_protocol_(stream_, [this]()
-                                                                                                                              { motor_task_.runCalibration(); }),
-                                                                                                          proto_protocol_(stream_, [this](PB_SmartKnobConfig &config)
-                                                                                                                          { applyConfig(config, true); })
+AppTask::AppTask(const uint8_t task_core, MotorTask &motor_task, DisplayTask *display_task) : Task("App", 3400, 1, task_core),
+                                                                                              stream_(),
+                                                                                              motor_task_(motor_task),
+                                                                                              display_task_(display_task),
+                                                                                              plaintext_protocol_(stream_, [this]()
+                                                                                                                  { motor_task_.runCalibration(); }),
+                                                                                              proto_protocol_(stream_, [this](PB_SmartKnobConfig &config)
+                                                                                                              { applyConfig(config, true); })
 {
 #if SK_DISPLAY
     assert(display_task != nullptr);
@@ -322,12 +212,12 @@ InterfaceTask::InterfaceTask(const uint8_t task_core, MotorTask &motor_task, Dis
     assert(mutex_ != NULL);
 }
 
-InterfaceTask::~InterfaceTask()
+AppTask::~AppTask()
 {
     vSemaphoreDelete(mutex_);
 }
 
-void InterfaceTask::run()
+void AppTask::run()
 {
     stream_.begin();
 
@@ -355,11 +245,11 @@ void InterfaceTask::run()
     }
 #endif
 
-    applyConfig(configs[0], false);
+    applyConfig(app_configs[0].motor_config, false);
     motor_task_.addListener(knob_state_queue_);
 
     plaintext_protocol_.init([this]()
-                             { changeConfig(true); },
+                             { changeConfig(0); },
                              [this]()
                              {
                                  if (!configuration_loaded_)
@@ -425,6 +315,33 @@ void InterfaceTask::run()
     {
         if (xQueueReceive(knob_state_queue_, &latest_state_, 0) == pdTRUE)
         {
+
+            if (app_configs[active_app_id].positions_count <= 0)
+            {
+                bounded_position = latest_state_.current_position;
+            }
+            else if (latest_state_.current_position >= 0)
+            {
+                bounded_position = latest_state_.current_position % app_configs[active_app_id].positions_count;
+            }
+            else
+            {
+                // this is just a trick to make mod of negative
+                bounded_position = (app_configs[active_app_id].positions_count * 100 + latest_state_.current_position) % app_configs[active_app_id].positions_count;
+            }
+
+            app_configs[active_app_id].last_position = bounded_position;
+
+            // combine to the AppState for the display
+            AppState app_state = {
+                app_configs[active_app_id].name,
+                active_app_id,
+                bounded_position, // TODO add rotation overflow
+                latest_state_,
+            };
+
+            publish(app_state);
+
             publishState();
         }
 
@@ -453,7 +370,7 @@ void InterfaceTask::run()
     }
 }
 
-void InterfaceTask::log(const char *msg)
+void AppTask::log(const char *msg)
 {
     // Allocate a string for the duration it's in the queue; it is free'd by the queue consumer
     std::string *msg_str = new std::string(msg);
@@ -462,30 +379,21 @@ void InterfaceTask::log(const char *msg)
     xQueueSendToBack(log_queue_, &msg_str, 0);
 }
 
-void InterfaceTask::changeConfig(bool next)
+void AppTask::changeConfig(uint32_t id)
 {
-    if (next)
-    {
-        current_config_ = (current_config_ + 1) % COUNT_OF(configs);
-    }
-    else
-    {
-        if (current_config_ == 0)
-        {
-            current_config_ = COUNT_OF(configs) - 1;
-        }
-        else
-        {
-            current_config_--;
-        }
-    }
+    active_app_id = id;
+    app_configs[active_app_id].motor_config.position_nonce = app_configs[active_app_id].last_position;
+    app_configs[active_app_id].motor_config.position = app_configs[active_app_id].last_position;
 
-    snprintf(buf_, sizeof(buf_), "Changing config to %d -- %s", current_config_, configs[current_config_].text);
+    snprintf(buf_, sizeof(buf_), "Changing config to %d -- %s, position requested %d", active_app_id, app_configs[active_app_id].name.c_str(), app_configs[active_app_id].motor_config.position_nonce);
     log(buf_);
-    applyConfig(configs[current_config_], false);
+
+    // move motor to last saved state
+
+    applyConfig(app_configs[active_app_id].motor_config, false);
 }
 
-void InterfaceTask::updateHardware()
+void AppTask::updateHardware()
 {
     // How far button is pressed, in range [0, 1]
     float press_value_unit = 0;
@@ -537,7 +445,14 @@ void InterfaceTask::updateHardware()
                         publishState();
                         if (!remote_controlled_)
                         {
-                            changeConfig(true);
+                            if (active_app_id == 0)
+                            {
+                                changeConfig(bounded_position + 1); // TODO: think it properly
+                            }
+                            else
+                            {
+                                changeConfig(0);
+                            }
                         }
                     }
                 }
@@ -595,20 +510,33 @@ void InterfaceTask::updateHardware()
 #endif
 }
 
-void InterfaceTask::setConfiguration(Configuration *configuration)
+void AppTask::setConfiguration(Configuration *configuration)
 {
     SemaphoreGuard lock(mutex_);
     configuration_ = configuration;
 }
 
-void InterfaceTask::publishState()
+void AppTask::addListener(QueueHandle_t queue)
+{
+    listeners_.push_back(queue);
+}
+
+void AppTask::publish(const AppState &state)
+{
+    for (auto listener : listeners_)
+    {
+        xQueueOverwrite(listener, &state);
+    }
+}
+
+void AppTask::publishState()
 {
     // Apply local state before publishing to serial
     latest_state_.press_nonce = press_count_;
     current_protocol_->handleState(latest_state_);
 }
 
-void InterfaceTask::applyConfig(PB_SmartKnobConfig &config, bool from_remote)
+void AppTask::applyConfig(PB_SmartKnobConfig &config, bool from_remote)
 {
     remote_controlled_ = from_remote;
     latest_config_ = config;

@@ -8,6 +8,7 @@
 #include "logger.h"
 #include "proto_gen/smartknob.pb.h"
 #include "task.h"
+#include "app_config.h"
 
 class DisplayTask : public Task<DisplayTask>
 {
@@ -31,9 +32,9 @@ private:
     /** Full-size sprite used as a framebuffer */
     TFT_eSprite spr_ = TFT_eSprite(&tft_);
 
-    QueueHandle_t knob_state_queue_;
+    QueueHandle_t app_state_queue_;
 
-    PB_SmartKnobState state_;
+    AppConfig app_state_;
     SemaphoreHandle_t mutex_;
     uint16_t brightness_;
     Logger *logger_;
