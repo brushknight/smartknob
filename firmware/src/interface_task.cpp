@@ -41,7 +41,22 @@ static PB_SmartKnobConfig configs[] = {
     // int32_t detent_positions[5];
     // float snap_point_bias;
     // int8_t led_hue;
-
+    {
+        0,
+        0,
+        0,
+        0,
+        -1, // max position < min position indicates no bounds
+        45 * PI / 180,
+        2,
+        1,
+        0.55,
+        "SKDEMO_Menu",
+        0,
+        {},
+        0,
+        200,
+    },
     {
         25,
         0,
