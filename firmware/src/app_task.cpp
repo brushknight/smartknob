@@ -162,7 +162,7 @@ static AppConfig app_configs[] = {
             0,
             {},
             0,
-            112,
+            90,
         },
     },
     {
@@ -185,7 +185,7 @@ static AppConfig app_configs[] = {
             0,
             {},
             0,
-            80,
+            70,
         },
     }};
 
