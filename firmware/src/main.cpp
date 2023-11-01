@@ -4,6 +4,7 @@
 #include "display_task.h"
 #include "app_task.h"
 #include "motor_task.h"
+#include "networking_task.h"
 
 Configuration config;
 
@@ -14,6 +15,13 @@ static DisplayTask *display_task_p = &display_task;
 static DisplayTask *display_task_p = nullptr;
 #endif
 static MotorTask motor_task(1, config);
+
+#if SK_NETWORKING
+static NetworkingTask networking_task(1);
+
+#else
+
+#endif
 
 AppTask app_task(0, motor_task, display_task_p);
 
@@ -36,6 +44,12 @@ void setup()
 
   motor_task.setLogger(&app_task);
   motor_task.begin();
+
+#if SK_NETWORKING
+  networking_task.setLogger(&app_task);
+  networking_task.addStateListener(app_task.getConnectivityStateQueue());
+  networking_task.begin();
+#endif
 
   // Free up the Arduino loop task
   vTaskDelete(NULL);

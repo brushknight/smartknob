@@ -176,16 +176,16 @@ static AppConfig app_configs[] = {
             0,
             0,
             0,
-            2,
-            25 * PI / 180,
+            10,
+            90 * PI / 180,
             1,
             1,
-            1.1,
+            0.55,
             "SKDEMO_Settings",
             0,
             {},
             0,
-            105,
+            80,
         },
     }};
 
@@ -207,6 +207,9 @@ AppTask::AppTask(const uint8_t task_core, MotorTask &motor_task, DisplayTask *di
 
     knob_state_queue_ = xQueueCreate(1, sizeof(PB_SmartKnobState));
     assert(knob_state_queue_ != NULL);
+
+    connectivity_status_queue_ = xQueueCreate(1, sizeof(ConnectivityState));
+    assert(connectivity_status_queue_ != NULL);
 
     mutex_ = xSemaphoreCreateMutex();
     assert(mutex_ != NULL);
@@ -313,6 +316,13 @@ void AppTask::run()
     // Interface loop:
     while (1)
     {
+
+        if (xQueueReceive(connectivity_status_queue_, &latest_connectivity_state_, 0) == pdTRUE)
+        {
+            // do nothing yet
+            log("new connectivity state recieved");
+        }
+
         if (xQueueReceive(knob_state_queue_, &latest_state_, 0) == pdTRUE)
         {
 
@@ -338,7 +348,10 @@ void AppTask::run()
                 active_app_id,
                 bounded_position, // TODO add rotation overflow
                 latest_state_,
+                latest_connectivity_state_,
             };
+
+            // log(app_state.connectivity_state.ssid.c_str());
 
             publish(app_state);
 
@@ -514,6 +527,11 @@ void AppTask::setConfiguration(Configuration *configuration)
 {
     SemaphoreGuard lock(mutex_);
     configuration_ = configuration;
+}
+
+QueueHandle_t AppTask::getConnectivityStateQueue()
+{
+    return connectivity_status_queue_;
 }
 
 void AppTask::addListener(QueueHandle_t queue)

@@ -27,6 +27,8 @@ public:
 
     void addListener(QueueHandle_t queue);
 
+    QueueHandle_t getConnectivityStateQueue();
+
 protected:
     void run();
 
@@ -59,8 +61,13 @@ private:
     PB_SmartKnobState latest_state_ = {};
     PB_SmartKnobConfig latest_config_ = {};
 
+    ConnectivityState latest_connectivity_state_ = {};
+
     QueueHandle_t log_queue_;
     QueueHandle_t knob_state_queue_;
+
+    QueueHandle_t connectivity_status_queue_;
+
     SerialProtocolPlaintext plaintext_protocol_;
     SerialProtocolProtobuf proto_protocol_;
 

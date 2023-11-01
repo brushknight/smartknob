@@ -14,6 +14,22 @@ struct AppConfig
     PB_SmartKnobConfig motor_config;
 };
 
+struct ConnectivityState
+{
+    bool is_connected;
+    int8_t signal_strength;
+    /* *
+0 - Excellent
+1 - Good
+2 - Fair
+3 - Poor
+4 - No signal
+    */
+    uint8_t signal_strenth_status;
+    std::string ssid;
+    std::string ip_address;
+};
+
 struct AppState
 {
     std::string name;
@@ -21,4 +37,5 @@ struct AppState
     int32_t current_position;
 
     PB_SmartKnobState motor_state;
+    ConnectivityState connectivity_state;
 };
