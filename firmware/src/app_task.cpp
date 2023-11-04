@@ -32,7 +32,7 @@ static AppConfig app_configs[] = {
         0,
         0,
         0,
-        6,
+        7,
         {
             0,
             0,
@@ -166,8 +166,31 @@ static AppConfig app_configs[] = {
         },
     },
     {
+        "Home Assistant",
+        APP_ID_HOME_ASSISTANT,
+        0,
+        0,
+        0,
+        {
+            0,
+            0,
+            0,
+            0,
+            10,
+            90 * PI / 180,
+            1,
+            1,
+            0.55,
+            "SKDEMO_Settings",
+            0,
+            {},
+            0,
+            70,
+        },
+    },
+    {
         "Settings",
-        6,
+        APP_ID_SETTINGS,
         0,
         0,
         0,
@@ -320,7 +343,7 @@ void AppTask::run()
         if (xQueueReceive(connectivity_status_queue_, &latest_connectivity_state_, 0) == pdTRUE)
         {
             // do nothing yet
-            log("new connectivity state recieved");
+            // log("new connectivity state recieved");
         }
 
         if (xQueueReceive(knob_state_queue_, &latest_state_, 0) == pdTRUE)
@@ -347,6 +370,7 @@ void AppTask::run()
                 app_configs[active_app_id].name,
                 active_app_id,
                 bounded_position, // TODO add rotation overflow
+                app_configs[active_app_id].positions_count,
                 latest_state_,
                 latest_connectivity_state_,
             };

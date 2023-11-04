@@ -4,11 +4,17 @@
 
 #include <Arduino.h>
 #include <TFT_eSPI.h>
+#include <HTTPClient.h>
 
 #include "logger.h"
 #include "proto_gen/smartknob.pb.h"
 #include "task.h"
 #include "app_config.h"
+
+#include "apps/menu.h"
+
+#include "apps/icons.h"
+#include "apps/apps.h"
 
 class DisplayTask : public Task<DisplayTask>
 {

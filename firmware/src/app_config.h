@@ -3,6 +3,10 @@
 #include <Arduino.h>
 #include "configuration.h"
 
+// TODO: move it into the app.h
+const uint32_t APP_ID_SETTINGS = 7;
+const uint32_t APP_ID_HOME_ASSISTANT = 6;
+
 struct AppConfig
 {
     std::string name;
@@ -35,6 +39,7 @@ struct AppState
     std::string name;
     uint32_t ui_id; // for linking with display renderer
     int32_t current_position;
+    int32_t positions_count; // max positions count
 
     PB_SmartKnobState motor_state;
     ConnectivityState connectivity_state;
