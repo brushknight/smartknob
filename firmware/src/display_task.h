@@ -11,10 +11,11 @@
 #include "task.h"
 #include "app_config.h"
 
-#include "apps/menu.h"
-
 #include "apps/icons.h"
 #include "apps/apps.h"
+
+#include "apps/menu.h"
+#include "apps/music.h"
 
 class DisplayTask : public Task<DisplayTask>
 {

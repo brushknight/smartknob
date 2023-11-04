@@ -3,19 +3,18 @@
 
 #include <typeinfo>
 
-Apps::Apps(TFT_eSprite *spr_)
+Apps::Apps()
 {
     mutex = xSemaphoreCreateMutex();
-    this->spr_ = spr_;
 }
 
-void Apps::add(uint8_t id, uint8_t app_id)
+void Apps::add(uint8_t id, App *app)
 {
     lock();
     char buf_[10];
     sprintf(buf_, "%d", id);
 
-    MenuApp *app = new MenuApp(spr_);
+    // MenuApp *app = new MenuApp(spr_);
 
     apps.insert(std::make_pair(buf_, app));
     // ESP_LOGD("apps.cpp", ">>> inserted menu App");

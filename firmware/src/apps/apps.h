@@ -8,8 +8,8 @@
 class Apps
 {
 public:
-    Apps(TFT_eSprite *spr_);
-    void add(uint8_t id, uint8_t app_id);
+    Apps();
+    void add(uint8_t id, App *app);
     void update(AppState state);
     TFT_eSprite *renderActive();
     void setActive(uint8_t id);
@@ -19,7 +19,6 @@ private:
     std::map<std::string, std::shared_ptr<App>> apps;
     // std::vector<std::unique_ptr<App>> apps;
     uint8_t active_id;
-    TFT_eSprite *spr_;
 
     // App *find(uint8_t id);
     void lock();

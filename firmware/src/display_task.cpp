@@ -1031,8 +1031,13 @@ void DisplayTask::run()
   }
   spr_.setTextColor(0xFFFF, TFT_BLACK);
 
-  Apps apps = Apps(&spr_);
-  apps.add(0, 0);
+  Apps apps = Apps();
+
+  MenuApp *menu_app = new MenuApp(&spr_);
+  MusicApp *music_app = new MusicApp(&spr_);
+
+  apps.add(0, menu_app);
+  apps.add(1, music_app);
 
   // MenuApp menu_app = ;
 
@@ -1494,140 +1499,12 @@ void DisplayTask::run()
       }
       else if (strncmp(state.config.text, "SKDEMO_Music", 12) == 0)
       {
-        uint32_t off_background = spr_.color565(0, 0, 0);
-        uint32_t off_lamp_color = spr_.color565(150, 150, 150);
-
-        uint32_t on_background = spr_.color565(71, 39, 1);
-        uint32_t on_lamp_color = spr_.color565(245, 164, 66);
-
-        uint32_t color_red_bright = spr_.color565(255, 64, 0);
-        uint32_t color_red_dark = spr_.color565(143, 36, 0);
-
-        uint16_t center_h = TFT_WIDTH / 2;
-        uint16_t center_v = TFT_WIDTH / 2;
-
-        uint8_t icon_width = 80;
-        uint8_t icon_height = 80;
-
-        uint16_t offset_vertical = 50;
-
-        uint16_t color_spotify = spr_.color565(30, 215, 96);
-
-        // if (state.current_position == 0)
-        // {
-        spr_.fillRect(0, 0, TFT_WIDTH, TFT_HEIGHT, off_background);
-        spr_.drawBitmap(center_h - icon_width / 2, center_v - icon_height / 2 - offset_vertical, spotify_80, icon_width, icon_height, color_spotify, off_background);
-
-        spr_.setTextColor(TFT_WHITE);
-        spr_.setFreeFont(&Roboto_Thin_Bold_24);
-        spr_.drawString("Beethoven", center_h, center_v + icon_height / 2 - offset_vertical + 20, 1);
-
-        spr_.setTextColor(TFT_WHITE);
-        spr_.setFreeFont(&Roboto_Thin_20);
-        spr_.drawString("Moonlight Sonata", center_h, center_v + icon_height / 2 - offset_vertical + 20 + 30, 1);
-
-        // Beethoven
-        // Moonlight Sonata
-
-        // spr_.setTextColor(off_lamp_color);
-        // spr_.setFreeFont(&Roboto_Thin_24);
-        // spr_.drawString("Kitchen", center_h, center_v + icon_size / 2 + 30 - offset_vertical, 1);
-        // }
-        // else
-        // {
-        //   spr_.fillRect(0, 0, TFT_WIDTH, TFT_HEIGHT, on_background);
-        //   spr_.drawBitmap(center_h - icon_width / 2, center_v - icon_size / 2 - offset_vertical, lamp_solid, icon_size, icon_size, on_lamp_color, on_background);
-        //   spr_.setTextColor(on_lamp_color);
-        //   spr_.setFreeFont(&Roboto_Thin_24);
-        //   spr_.drawString("Kitchen", center_h, center_v + icon_size / 2 + 30 - offset_vertical, 1);
-        // }
-
-        float range_radians = (state.config.max_position - state.config.min_position + 1) * state.config.position_width_radians;
-
-        // spr_.drawLine(TFT_WIDTH / 2 + RADIUS * cosf(left_bound), TFT_HEIGHT / 2 - RADIUS * sinf(left_bound), TFT_WIDTH / 2 + (RADIUS - 10) * cosf(left_bound), TFT_HEIGHT / 2 - (RADIUS - 10) * sinf(left_bound), cooling_color);
-        // spr_.drawLine(TFT_WIDTH / 2 + RADIUS * cosf(right_bound), TFT_HEIGHT / 2 - RADIUS * sinf(right_bound), TFT_WIDTH / 2 + (RADIUS - 10) * cosf(right_bound), TFT_HEIGHT / 2 - (RADIUS - 10) * sinf(right_bound), heating_color);
-
-        uint32_t dot_color;
-        uint8_t dot_radius = 2;
-
-        // 255, 64, 0
-
-        for (int i = 0; i < num_positions - 1; i++)
-        {
-          if (i < state.current_position)
-          {
-            if (i < 15)
-            {
-              dot_color = TFT_WHITE;
-            }
-            else
-            {
-              dot_color = color_red_bright;
-            }
-            dot_radius = 4;
-          }
-          else
-          {
-            if (i < 15)
-            {
-              dot_color = DISABLED_COLOR;
-            }
-            else
-            {
-              dot_color = color_red_dark;
-            }
-            dot_radius = 2;
-          }
-
-          float line_position = left_bound - (range_radians / (num_positions - 1)) * i;
-          // spr_.drawLine(TFT_WIDTH / 2 + RADIUS * cosf(line_position), TFT_HEIGHT / 2 - RADIUS * sinf(line_position), TFT_WIDTH / 2 + (RADIUS - tick_line_length) * cosf(line_position), TFT_HEIGHT / 2 - (RADIUS - tick_line_length) * sinf(line_position), dot_color);
-
-          spr_.fillCircle(TFT_WIDTH / 2 + (RADIUS - 10) * cosf(line_position), TFT_HEIGHT / 2 - (RADIUS - 10) * sinf(line_position), dot_radius, dot_color);
-        }
-
-        uint16_t footer_position = 190;
-
-        spr_.fillRect(0, footer_position, TFT_WIDTH, TFT_HEIGHT, off_lamp_color);
-
-        icon_width = 44;
-        icon_height = 30;
-
-        uint16_t image_offset = 5;
-
-        if (state.current_position > 15)
-        {
-          spr_.drawBitmap(center_h - icon_width / 2 - 30, footer_position + image_offset, volume_30_4, icon_width, icon_height, color_red_dark, off_lamp_color);
-        }
-        else if (state.current_position >= 10)
-        {
-          spr_.drawBitmap(center_h - icon_width / 2 - 30, footer_position + image_offset, volume_30_4, icon_width, icon_height, TFT_BLACK, off_lamp_color);
-        }
-        else if (state.current_position >= 5)
-        {
-          spr_.drawBitmap(center_h - icon_width / 2 - 30, footer_position + image_offset, volume_30_3, icon_width, icon_height, TFT_BLACK, off_lamp_color);
-        }
-        else if (state.current_position > 0)
-        {
-          spr_.drawBitmap(center_h - icon_width / 2 - 30, footer_position + image_offset, volume_30_2, icon_width, icon_height, TFT_BLACK, off_lamp_color);
-        }
-        else
-        {
-          spr_.drawBitmap(center_h - icon_width / 2 - 30, footer_position + image_offset, volume_30_1, icon_width, icon_height, DISABLED_COLOR, off_lamp_color);
-        }
-
-        spr_.setTextColor(TFT_BLACK);
-        spr_.setFreeFont(&Roboto_Thin_Bold_24);
-
-        char buf_[4];
-        sprintf(buf_, "%d%%", state.current_position * 5);
-        spr_.drawString(buf_, center_h + 30, footer_position + 18, 1);
+        apps.setActive(1);
+        apps.update(app_state);
+        apps.renderActive()->pushSprite(0, 0);
       }
       else if (strncmp(state.config.text, "SKDEMO_Menu", 11) == 0)
       {
-
-        // menu_app->updateStateFromKnob(state);
-        // menu_app->render()->pushSprite(0, 0);
-
         apps.setActive(0);
         apps.update(app_state);
         apps.renderActive()->pushSprite(0, 0);
