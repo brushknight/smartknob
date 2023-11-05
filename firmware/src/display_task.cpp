@@ -1004,6 +1004,11 @@ static void drawPlayButton(TFT_eSprite &spr, int x, int y, int width, int height
       color);
 }
 
+Apps *DisplayTask::getApps()
+{
+  return &apps;
+}
+
 void DisplayTask::run()
 {
   tft_.begin();
@@ -1030,8 +1035,6 @@ void DisplayTask::run()
     tft_.fillScreen(TFT_PURPLE);
   }
   spr_.setTextColor(0xFFFF, TFT_BLACK);
-
-  Apps apps = Apps();
 
   MenuApp *menu_app = new MenuApp(&spr_);
   MusicApp *music_app = new MusicApp(&spr_);
@@ -1499,14 +1502,14 @@ void DisplayTask::run()
       }
       else if (strncmp(state.config.text, "SKDEMO_Music", 12) == 0)
       {
-        apps.setActive(1);
-        apps.update(app_state);
+        // apps.setActive(1);
+        // apps.update(app_state);
         apps.renderActive()->pushSprite(0, 0);
       }
       else if (strncmp(state.config.text, "SKDEMO_Menu", 11) == 0)
       {
-        apps.setActive(0);
-        apps.update(app_state);
+        // apps.setActive(0);
+        // apps.update(app_state);
         apps.renderActive()->pushSprite(0, 0);
       }
       else if (app_state.ui_id == APP_ID_SETTINGS)

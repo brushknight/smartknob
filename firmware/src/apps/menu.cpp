@@ -106,6 +106,11 @@ void MenuApp::updateStateFromKnob(PB_SmartKnobState state)
     current_menu_position = position_for_menu_calc % items.size();
 }
 
+uint8_t MenuApp::navigationNext()
+{
+    return current_menu_position + 1; // +1 to shift from 0 position which is menu itself
+}
+
 TFT_eSprite *MenuApp::render()
 {
     // ESP_LOGD("menu.cpp", "called real method");

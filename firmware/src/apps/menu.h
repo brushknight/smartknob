@@ -25,6 +25,7 @@ public:
     void add_item(uint8_t id, MenuItem item);
     MenuItem find_item(uint8_t id);
     std::string getClassName();
+    uint8_t navigationNext();
 
 private:
     uint8_t menu_items_count = 0;

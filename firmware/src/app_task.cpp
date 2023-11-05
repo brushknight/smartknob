@@ -243,6 +243,11 @@ AppTask::~AppTask()
     vSemaphoreDelete(mutex_);
 }
 
+void AppTask::setApps(Apps *apps)
+{
+    this->apps = apps;
+}
+
 void AppTask::run()
 {
     stream_.begin();
@@ -377,6 +382,8 @@ void AppTask::run()
 
             // log(app_state.connectivity_state.ssid.c_str());
 
+            apps->update(app_state);
+
             publish(app_state);
 
             publishState();
@@ -418,16 +425,22 @@ void AppTask::log(const char *msg)
 
 void AppTask::changeConfig(uint32_t id)
 {
-    active_app_id = id;
-    app_configs[active_app_id].motor_config.position_nonce = app_configs[active_app_id].last_position;
-    app_configs[active_app_id].motor_config.position = app_configs[active_app_id].last_position;
+    apps->setActive(id);
 
-    snprintf(buf_, sizeof(buf_), "Changing config to %d -- %s, position requested %d", active_app_id, app_configs[active_app_id].name.c_str(), app_configs[active_app_id].motor_config.position_nonce);
-    log(buf_);
+    active_app_id = id;
+
+    // active_app_id = id;
+    // app_configs[active_app_id].motor_config.position_nonce = app_configs[active_app_id].last_position;
+    // app_configs[active_app_id].motor_config.position = app_configs[active_app_id].last_position;
+
+    // snprintf(buf_, sizeof(buf_), "Changing config to %d", active_app_id);
+    // ESP_LOGD("", "%s", buf_);
+    // log(buf_);
 
     // move motor to last saved state
 
-    applyConfig(app_configs[active_app_id].motor_config, false);
+    // applyConfig(app_configs[active_app_id].motor_config, false);
+    applyConfig(apps->getActiveMotorConfig(), false);
 }
 
 void AppTask::updateHardware()
@@ -482,14 +495,7 @@ void AppTask::updateHardware()
                         publishState();
                         if (!remote_controlled_)
                         {
-                            if (active_app_id == 0)
-                            {
-                                changeConfig(bounded_position + 1); // TODO: think it properly
-                            }
-                            else
-                            {
-                                changeConfig(0);
-                            }
+                            changeConfig(apps->navigationNext());
                         }
                     }
                 }
@@ -578,7 +584,7 @@ void AppTask::publishState()
     current_protocol_->handleState(latest_state_);
 }
 
-void AppTask::applyConfig(PB_SmartKnobConfig &config, bool from_remote)
+void AppTask::applyConfig(PB_SmartKnobConfig config, bool from_remote)
 {
     remote_controlled_ = from_remote;
     latest_config_ = config;

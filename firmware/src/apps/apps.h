@@ -5,6 +5,7 @@
 #include "app.h"
 #include "../app_config.h"
 
+// TODO: generate menu based on items in the map
 class Apps
 {
 public:
@@ -13,6 +14,8 @@ public:
     void update(AppState state);
     TFT_eSprite *renderActive();
     void setActive(uint8_t id);
+    uint8_t navigationNext();
+    PB_SmartKnobConfig getActiveMotorConfig();
 
 private:
     QueueHandle_t mutex;
@@ -24,9 +27,3 @@ private:
     void lock();
     void unlock();
 };
-// map of apps
-// keep state of all apps
-// keep active app
-// allow app update
-// allow app render
-// protect read/write with mutex due to thread sharing

@@ -4,6 +4,29 @@ MusicApp::MusicApp(TFT_eSprite *spr_) : App(spr_)
 {
     sprintf(author, "%s", "Beethoven");
     sprintf(track, "%s", "Moonlight Sonata");
+
+    motor_config = PB_SmartKnobConfig{
+        0,
+        0,
+        0,
+        0,
+        20,
+        230.0 / 20.0 * PI / 180,
+        1,
+        1,
+        1.1,
+        "SKDEMO_Music", // TODO: clean this
+        0,
+        {},
+        0,
+        90,
+    };
+}
+
+uint8_t MusicApp::navigationNext()
+{
+    // back to menu
+    return 0;
 }
 
 void MusicApp::updateStateFromKnob(PB_SmartKnobState state)
@@ -49,7 +72,7 @@ TFT_eSprite *MusicApp::render()
 
     uint8_t num_positions = 21;
 
-    float range_radians = num_positions * 230.0 / 20.0 * PI / 180;
+    float range_radians = num_positions * motor_config.position_width_radians;
     float left_bound = PI / 2 + range_radians / 2;
 
     uint32_t dot_color;
@@ -82,10 +105,9 @@ TFT_eSprite *MusicApp::render()
             dot_radius = 2;
         }
 
-        float line_position = left_bound - (range_radians / (num_positions - 1)) * i;
-        // spr_->drawLine(TFT_WIDTH / 2 + RADIUS * cosf(line_position), TFT_HEIGHT / 2 - RADIUS * sinf(line_position), TFT_WIDTH / 2 + (RADIUS - tick_line_length) * cosf(line_position), TFT_HEIGHT / 2 - (RADIUS - tick_line_length) * sinf(line_position), dot_color);
+        float dot_position = left_bound - (range_radians / (num_positions - 1)) * i;
 
-        spr_->fillCircle(TFT_WIDTH / 2 + (screen_radius - 10) * cosf(line_position), TFT_HEIGHT / 2 - (screen_radius - 10) * sinf(line_position), dot_radius, dot_color);
+        spr_->fillCircle(TFT_WIDTH / 2 + (screen_radius - 10) * cosf(dot_position), TFT_HEIGHT / 2 - (screen_radius - 10) * sinf(dot_position), dot_radius, dot_color);
     }
 
     uint16_t footer_position = 190;

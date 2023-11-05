@@ -58,6 +58,31 @@ void Apps::setActive(uint8_t id)
     unlock();
 }
 
+uint8_t Apps::navigationNext()
+{
+    lock();
+    char buf_[10];
+    sprintf(buf_, "%d", active_id);
+    // ESP_LOGD("apps.cpp", ">>> pre-updated");
+    uint8_t next = apps[buf_]->navigationNext();
+    // ESP_LOGD("apps.cpp", ">>> updated");
+    unlock();
+    return next;
+}
+
+PB_SmartKnobConfig Apps::getActiveMotorConfig()
+{
+    lock();
+    char buf_[10];
+    sprintf(buf_, "%d", active_id);
+    // ESP_LOGD("apps.cpp", ">>> pre-updated");
+    PB_SmartKnobConfig motor_config = apps[buf_]->getMotorConfig();
+    // ESP_LOGD("apps.cpp", ">>> updated");
+
+    unlock();
+    return motor_config;
+}
+
 // App *Apps::find(uint8_t id)
 // {
 //     // TODO: add protection with array size

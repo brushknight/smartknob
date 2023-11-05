@@ -33,6 +33,10 @@ void setup()
 
   // Connect display to motor_task's knob state feed
   app_task.addListener(display_task.getKnobStateQueue());
+
+  // link apps from display task
+  app_task.setApps(display_task.getApps());
+
 #endif
 
   app_task.begin();

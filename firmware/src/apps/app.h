@@ -38,6 +38,8 @@ public:
         return "App";
     }
 
+    virtual uint8_t navigationNext();
+
 protected:
     /** Full-size sprite used as a framebuffer */
     TFT_eSprite *spr_;

@@ -25,6 +25,8 @@ public:
     void log(const char *msg) override;
     void setConfiguration(Configuration *configuration);
 
+    void setApps(Apps *apps);
+
     void addListener(QueueHandle_t queue);
 
     QueueHandle_t getConnectivityStateQueue();
@@ -40,6 +42,7 @@ private:
 #endif
     MotorTask &motor_task_;
     DisplayTask *display_task_;
+    Apps *apps;
     char buf_[128];
 
     std::vector<QueueHandle_t> listeners_;
@@ -77,6 +80,6 @@ private:
     void changeConfig(uint32_t id);
     void updateHardware();
     void publishState();
-    void applyConfig(PB_SmartKnobConfig &config, bool from_remote);
+    void applyConfig(PB_SmartKnobConfig config, bool from_remote);
     void publish(const AppState &state);
 };

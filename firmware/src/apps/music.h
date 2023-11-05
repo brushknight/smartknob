@@ -12,6 +12,7 @@ public:
     MusicApp(TFT_eSprite *spr_);
     TFT_eSprite *render();
     void updateStateFromKnob(PB_SmartKnobState state);
+    uint8_t navigationNext();
 
 private:
     uint8_t current_volume = 0;
