@@ -16,6 +16,7 @@
 
 #include "apps/menu.h"
 #include "apps/music.h"
+#include "apps/climate.h"
 
 class DisplayTask : public Task<DisplayTask>
 {
