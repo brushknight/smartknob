@@ -21,7 +21,7 @@ private:
     QueueHandle_t mutex;
     std::map<std::string, std::shared_ptr<App>> apps;
     // std::vector<std::unique_ptr<App>> apps;
-    uint8_t active_id;
+    uint8_t active_id = 0;
 
     // App *find(uint8_t id);
     void lock();

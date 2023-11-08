@@ -31,6 +31,7 @@ void Apps::update(AppState state)
     sprintf(buf_, "%d", active_id);
     // ESP_LOGD("apps.cpp", ">>> pre-updated");
     apps[buf_]->updateStateFromKnob(state.motor_state);
+    apps[buf_]->updateStateFromSystem(state);
     // ESP_LOGD("apps.cpp", ">>> updated");
 
     unlock();

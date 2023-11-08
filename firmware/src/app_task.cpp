@@ -26,192 +26,6 @@ HX711 scale;
 Adafruit_VEML7700 veml = Adafruit_VEML7700();
 #endif
 
-static AppConfig app_configs[] = {
-    {
-        "menu",
-        0,
-        0,
-        0,
-        7,
-        {
-            0,
-            0,
-            0,
-            0,
-            -1, // max position < min position indicates no bounds
-            25 * PI / 180,
-            2,
-            1,
-            0.55,
-            "SKDEMO_Menu",
-            0,
-            {},
-            0,
-            200,
-        },
-    },
-    {
-        "hvac",
-        1,
-        0,
-        0,
-        0,
-        {
-            25,
-            0,
-            25,
-            16,
-            35,
-            8.225806452 * PI / 120,
-            2,
-            1,
-            1.1,
-            "SKDEMO_HVAC",
-            0,
-            {},
-            0,
-            27,
-        },
-    },
-    {
-        "Shades",
-        2,
-        0,
-        0,
-        0,
-        {
-            15,
-            0,
-            15,
-            0,
-            20,
-            8.225806452 * PI / 120,
-            2,
-            1,
-            1.1,
-            "SKDEMO_Shades",
-            0,
-            {},
-            0,
-            27,
-        },
-    },
-    {
-        "switch on off",
-        3,
-        0,
-        0,
-        0,
-        {
-            0,
-            0,
-            0,
-            0,
-            1,
-            60 * PI / 180,
-            1,
-            1,
-            0.55, // Note the snap point is slightly past the midpoint (0.5); compare to normal detents which use a snap point *past* the next value (i.e. > 1)
-            "SKDEMO_Light_switch",
-            0,
-            {},
-            0,
-            27,
-        },
-    },
-    {
-        "light dimmer",
-        4,
-        0,
-        0,
-        0,
-        {
-            0,
-            0,
-            0,
-            0,
-            100,
-            3.6 / 2 * PI / 180,
-            1,
-            1,
-            1.1,
-            "SKDEMO_Light_dimmer",
-            0,
-            {},
-            0,
-            27,
-        },
-    },
-    {
-        "Music",
-        5,
-        0,
-        0,
-        0,
-        {
-            0,
-            0,
-            0,
-            0,
-            20,
-            230.0 / 20.0 * PI / 180,
-            1,
-            1,
-            1.1,
-            "SKDEMO_Music",
-            0,
-            {},
-            0,
-            90,
-        },
-    },
-    {
-        "Home Assistant",
-        APP_ID_HOME_ASSISTANT,
-        0,
-        0,
-        0,
-        {
-            0,
-            0,
-            0,
-            0,
-            10,
-            90 * PI / 180,
-            1,
-            1,
-            0.55,
-            "SKDEMO_Settings",
-            0,
-            {},
-            0,
-            70,
-        },
-    },
-    {
-        "Settings",
-        APP_ID_SETTINGS,
-        0,
-        0,
-        0,
-        {
-            0,
-            0,
-            0,
-            0,
-            10,
-            90 * PI / 180,
-            1,
-            1,
-            0.55,
-            "SKDEMO_Settings",
-            0,
-            {},
-            0,
-            70,
-        },
-    }};
-
 AppTask::AppTask(const uint8_t task_core, MotorTask &motor_task, DisplayTask *display_task) : Task("App", 3400, 1, task_core),
                                                                                               stream_(),
                                                                                               motor_task_(motor_task),
@@ -276,7 +90,11 @@ void AppTask::run()
     }
 #endif
 
-    applyConfig(app_configs[0].motor_config, false);
+    log("Giving 0.5s for Apps to initialize");
+    delay(500);
+
+    apps->setActive(0);
+    applyConfig(apps->getActiveMotorConfig(), false);
     motor_task_.addListener(knob_state_queue_);
 
     plaintext_protocol_.init([this]()
@@ -354,28 +172,8 @@ void AppTask::run()
         if (xQueueReceive(knob_state_queue_, &latest_state_, 0) == pdTRUE)
         {
 
-            if (app_configs[active_app_id].positions_count <= 0)
-            {
-                bounded_position = latest_state_.current_position;
-            }
-            else if (latest_state_.current_position >= 0)
-            {
-                bounded_position = latest_state_.current_position % app_configs[active_app_id].positions_count;
-            }
-            else
-            {
-                // this is just a trick to make mod of negative
-                bounded_position = (app_configs[active_app_id].positions_count * 100 + latest_state_.current_position) % app_configs[active_app_id].positions_count;
-            }
-
-            app_configs[active_app_id].last_position = bounded_position;
-
             // combine to the AppState for the display
             AppState app_state = {
-                app_configs[active_app_id].name,
-                active_app_id,
-                bounded_position, // TODO add rotation overflow
-                app_configs[active_app_id].positions_count,
                 latest_state_,
                 latest_connectivity_state_,
             };
@@ -383,9 +181,7 @@ void AppTask::run()
             // log(app_state.connectivity_state.ssid.c_str());
 
             apps->update(app_state);
-
             publish(app_state);
-
             publishState();
         }
 
@@ -427,19 +223,6 @@ void AppTask::changeConfig(uint32_t id)
 {
     apps->setActive(id);
 
-    active_app_id = id;
-
-    // active_app_id = id;
-    // app_configs[active_app_id].motor_config.position_nonce = app_configs[active_app_id].last_position;
-    // app_configs[active_app_id].motor_config.position = app_configs[active_app_id].last_position;
-
-    // snprintf(buf_, sizeof(buf_), "Changing config to %d", active_app_id);
-    // ESP_LOGD("", "%s", buf_);
-    // log(buf_);
-
-    // move motor to last saved state
-
-    // applyConfig(app_configs[active_app_id].motor_config, false);
     applyConfig(apps->getActiveMotorConfig(), false);
 }
 

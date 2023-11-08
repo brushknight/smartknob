@@ -40,6 +40,10 @@ void ClimateApp::updateStateFromKnob(PB_SmartKnobState state)
 {
     wanted_temperature = state.current_position;
 
+    // needed to next reload of App
+    motor_config.position_nonce = wanted_temperature;
+    motor_config.position = wanted_temperature;
+
     adjusted_sub_position = state.sub_position_unit * state.config.position_width_radians;
 
     if (state.current_position == motor_config.min_position && state.sub_position_unit < 0)
@@ -51,6 +55,8 @@ void ClimateApp::updateStateFromKnob(PB_SmartKnobState state)
         adjusted_sub_position = logf(1 + state.sub_position_unit * motor_config.position_width_radians / 5 / PI * 180) * 5 * PI / 180;
     }
 }
+
+void ClimateApp::updateStateFromSystem(AppState state) {}
 
 TFT_eSprite *ClimateApp::render()
 {

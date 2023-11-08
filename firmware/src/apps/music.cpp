@@ -33,7 +33,13 @@ void MusicApp::updateStateFromKnob(PB_SmartKnobState state)
 {
     current_volume_position = state.current_position;
     current_volume = current_volume_position * 5;
+
+    // needed to next reload of App
+    motor_config.position_nonce = current_volume_position;
+    motor_config.position = current_volume_position;
 }
+
+void MusicApp::updateStateFromSystem(AppState state) {}
 
 TFT_eSprite *MusicApp::render()
 {

@@ -3,6 +3,7 @@
 #include <Arduino.h>
 #include <TFT_eSPI.h>
 #include "../proto_gen/smartknob.pb.h"
+#include "../app_config.h"
 #include "icons.h"
 
 const uint32_t APP_ID_CLIMATE = 1;
@@ -26,6 +27,7 @@ public:
     //     // return spr_;
     // }
     virtual void updateStateFromKnob(PB_SmartKnobState state);
+    virtual void updateStateFromSystem(AppState state);
 
     PB_SmartKnobConfig getMotorConfig()
     {

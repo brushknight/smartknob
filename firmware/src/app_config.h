@@ -36,10 +36,10 @@ struct ConnectivityState
 
 struct AppState
 {
-    std::string name;
-    uint32_t ui_id; // for linking with display renderer
-    int32_t current_position;
-    int32_t positions_count; // max positions count
+    // std::string name;
+    // uint32_t ui_id; // for linking with display renderer
+    // int32_t current_position;
+    // int32_t positions_count; // max positions count
 
     PB_SmartKnobState motor_state;
     ConnectivityState connectivity_state;

@@ -74,9 +74,6 @@ private:
     SerialProtocolPlaintext plaintext_protocol_;
     SerialProtocolProtobuf proto_protocol_;
 
-    uint32_t active_app_id = 0;
-    int32_t bounded_position = 0;
-
     void changeConfig(uint32_t id);
     void updateHardware();
     void publishState();

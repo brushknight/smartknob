@@ -98,6 +98,10 @@ void MenuApp::updateStateFromKnob(PB_SmartKnobState state)
 
     int32_t position_for_menu_calc = state.current_position;
 
+    // needed to next reload of App
+    motor_config.position_nonce = position_for_menu_calc;
+    motor_config.position = position_for_menu_calc;
+
     if (state.current_position < 0)
     {
         position_for_menu_calc = items.size() * 10000 + state.current_position;
@@ -105,6 +109,8 @@ void MenuApp::updateStateFromKnob(PB_SmartKnobState state)
 
     current_menu_position = position_for_menu_calc % items.size();
 }
+
+void MenuApp::updateStateFromSystem(AppState state) {}
 
 uint8_t MenuApp::navigationNext()
 {

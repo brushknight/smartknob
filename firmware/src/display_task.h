@@ -17,6 +17,10 @@
 #include "apps/menu.h"
 #include "apps/music.h"
 #include "apps/climate.h"
+#include "apps/blinds.h"
+#include "apps/settings.h"
+#include "apps/light_dimmer.h"
+#include "apps/light_switch.h"
 
 class DisplayTask : public Task<DisplayTask>
 {
