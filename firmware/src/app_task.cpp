@@ -180,7 +180,7 @@ void AppTask::run()
 
             // log(app_state.connectivity_state.ssid.c_str());
 
-            apps->update(app_state);
+            apps->update(app_state); // -> requested change event
             publish(app_state);
             publishState();
         }
