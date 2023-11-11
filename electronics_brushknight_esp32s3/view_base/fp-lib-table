@@ -14,4 +14,5 @@
   (lib (name "ESP32-S3-WROOM-1-N8R8")(type "KiCad")(uri "${KIPRJMOD}/../lib/ESP32-S3-WROOM-1-N8R8.pretty")(options "")(descr ""))
   (lib (name "cp2102")(type "KiCad")(uri "${KIPRJMOD}/../lib/cp2102.pretty")(options "")(descr ""))
   (lib (name "cleaned footprints")(type "KiCad")(uri "${KIPRJMOD}/lib/cleaned footprints.pretty")(options "")(descr ""))
+  (lib (name "screen_connector")(type "KiCad")(uri "${KIPRJMOD}/lib/view_custom.pretty/screen_connector.pretty")(options "")(descr ""))
 )
