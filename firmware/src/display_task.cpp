@@ -74,13 +74,15 @@ void DisplayTask::run()
   SettingsApp *settings_app = new SettingsApp(&spr_);
   LightDimmerApp *light_dimmer_app = new LightDimmerApp(&spr_);
   LightSwitchApp *light_switch_app = new LightSwitchApp(&spr_);
+  PrinterChamberApp *printer_chamber_app = new PrinterChamberApp(&spr_);
 
   apps.add(0, menu_app);
-  apps.add(1, climate_app);
-  apps.add(2, blinds_app);
-  apps.add(3, light_switch_app);
-  apps.add(4, light_dimmer_app);
-  apps.add(5, music_app);
+  apps.add(1, printer_chamber_app);
+  apps.add(2, climate_app);
+  apps.add(3, blinds_app);
+  apps.add(4, light_switch_app);
+  apps.add(5, light_dimmer_app);
+  apps.add(6, music_app);
   apps.add(7, settings_app);
 
   AppState app_state;

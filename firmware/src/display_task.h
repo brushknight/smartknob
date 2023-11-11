@@ -21,6 +21,7 @@
 #include "apps/settings.h"
 #include "apps/light_dimmer.h"
 #include "apps/light_switch.h"
+#include "apps/3d_printer_chamber.h"
 
 class DisplayTask : public Task<DisplayTask>
 {

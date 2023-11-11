@@ -24,6 +24,16 @@ MenuApp::MenuApp(TFT_eSprite *spr_) : App(spr_)
     add_item(
         0,
         MenuItem{
+            "3D printer",
+            1, // TODO: make a const
+            spr_->color565(0, 255, 200),
+            printer_40,
+            printer_80,
+        });
+
+    add_item(
+        1,
+        MenuItem{
             "Climate",
             1, // TODO: make a const
             spr_->color565(255, 128, 0),
@@ -32,54 +42,54 @@ MenuApp::MenuApp(TFT_eSprite *spr_) : App(spr_)
         });
 
     add_item(
-        1,
+        2,
         MenuItem{
             "Shades",
-            1, // TODO: make a const
+            2, // TODO: make a const
             spr_->color565(66, 149, 245),
             shades_40,
             shades_80,
         });
 
     add_item(
-        2,
+        3,
         MenuItem{
             "Ceiling",
-            1, // TODO: make a const
+            3, // TODO: make a const
             spr_->color565(239, 223, 72),
             light_switch_40,
             light_switch_80,
         });
 
     add_item(
-        3,
+        4,
         MenuItem{
             "Countertop",
-            1, // TODO: make a const
+            4, // TODO: make a const
             spr_->color565(249, 165, 44),
             light_top_40,
             light_top_80,
         });
 
     add_item(
-        4,
+        5,
         MenuItem{
             "Music",
-            1, // TODO: make a const
+            5, // TODO: make a const
             spr_->color565(30, 215, 96),
             spotify_40,
             spotify_80,
         });
 
-    add_item(
-        5,
-        MenuItem{
-            "Home Assistant",
-            1, // TODO: make a const
-            spr_->color565(24, 188, 242),
-            home_assistant_40,
-            home_assistant_80,
-        });
+    // add_item(
+    //     6,
+    //     MenuItem{
+    //         "Home Assistant",
+    //         1, // TODO: make a const
+    //         spr_->color565(24, 188, 242),
+    //         home_assistant_40,
+    //         home_assistant_80,
+    //     });
 
     add_item(
         6,
