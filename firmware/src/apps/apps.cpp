@@ -23,18 +23,19 @@ void Apps::add(uint8_t id, App *app)
     unlock();
 }
 
-void Apps::update(AppState state)
+EntityStateUpdate Apps::update(AppState state)
 {
     // TODO: update with AppState
     lock();
     char buf_[10];
     sprintf(buf_, "%d", active_id);
     // ESP_LOGD("apps.cpp", ">>> pre-updated");
-    apps[buf_]->updateStateFromKnob(state.motor_state);
+    EntityStateUpdate new_state_update = apps[buf_]->updateStateFromKnob(state.motor_state);
     apps[buf_]->updateStateFromSystem(state);
     // ESP_LOGD("apps.cpp", ">>> updated");
 
     unlock();
+    return new_state_update;
 }
 
 TFT_eSprite *Apps::renderActive()

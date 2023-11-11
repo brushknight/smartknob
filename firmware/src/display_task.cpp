@@ -74,7 +74,7 @@ void DisplayTask::run()
   SettingsApp *settings_app = new SettingsApp(&spr_);
   LightDimmerApp *light_dimmer_app = new LightDimmerApp(&spr_);
   LightSwitchApp *light_switch_app = new LightSwitchApp(&spr_);
-  PrinterChamberApp *printer_chamber_app = new PrinterChamberApp(&spr_);
+  PrinterChamberApp *printer_chamber_app = new PrinterChamberApp(&spr_, "3d_printer");
 
   apps.add(0, menu_app);
   apps.add(1, printer_chamber_app);

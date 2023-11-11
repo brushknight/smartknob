@@ -12,6 +12,7 @@
 #include "serial/uart_stream.h"
 #include "task.h"
 #include "app_config.h"
+#include "networking_task.h"
 
 class AppTask : public Task<AppTask>,
                 public Logger
@@ -19,7 +20,7 @@ class AppTask : public Task<AppTask>,
     friend class Task<AppTask>; // Allow base Task to invoke protected run()
 
 public:
-    AppTask(const uint8_t task_core, MotorTask &motor_task, DisplayTask *display_task);
+    AppTask(const uint8_t task_core, MotorTask &motor_task, DisplayTask *display_task, NetworkingTask *networking_task);
     virtual ~AppTask();
 
     void log(const char *msg) override;
@@ -42,6 +43,7 @@ private:
 #endif
     MotorTask &motor_task_;
     DisplayTask *display_task_;
+    NetworkingTask *networking_task_;
     Apps *apps;
     char buf_[128];
 

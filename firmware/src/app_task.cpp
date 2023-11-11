@@ -26,14 +26,19 @@ HX711 scale;
 Adafruit_VEML7700 veml = Adafruit_VEML7700();
 #endif
 
-AppTask::AppTask(const uint8_t task_core, MotorTask &motor_task, DisplayTask *display_task) : Task("App", 3400, 1, task_core),
-                                                                                              stream_(),
-                                                                                              motor_task_(motor_task),
-                                                                                              display_task_(display_task),
-                                                                                              plaintext_protocol_(stream_, [this]()
-                                                                                                                  { motor_task_.runCalibration(); }),
-                                                                                              proto_protocol_(stream_, [this](PB_SmartKnobConfig &config)
-                                                                                                              { applyConfig(config, true); })
+AppTask::AppTask(
+    const uint8_t task_core,
+    MotorTask &motor_task,
+    DisplayTask *display_task,
+    NetworkingTask *networking_task) : Task("App", 3400, 1, task_core),
+                                       stream_(),
+                                       motor_task_(motor_task),
+                                       display_task_(display_task),
+                                       networking_task_(networking_task),
+                                       plaintext_protocol_(stream_, [this]()
+                                                           { motor_task_.runCalibration(); }),
+                                       proto_protocol_(stream_, [this](PB_SmartKnobConfig &config)
+                                                       { applyConfig(config, true); })
 {
 #if SK_DISPLAY
     assert(display_task != nullptr);
@@ -159,6 +164,8 @@ void AppTask::run()
     plaintext_protocol_.setProtocolChangeCallback(protocol_change_callback);
     proto_protocol_.setProtocolChangeCallback(protocol_change_callback);
 
+    EntityStateUpdate entity_state_update_to_send;
+
     // Interface loop:
     while (1)
     {
@@ -180,7 +187,10 @@ void AppTask::run()
 
             // log(app_state.connectivity_state.ssid.c_str());
 
-            apps->update(app_state); // -> requested change event
+            entity_state_update_to_send = apps->update(app_state);
+
+            networking_task_->enqueueEntityStateToSend(entity_state_update_to_send);
+
             publish(app_state);
             publishState();
         }

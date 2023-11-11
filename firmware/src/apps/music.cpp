@@ -29,7 +29,7 @@ uint8_t MusicApp::navigationNext()
     return 0;
 }
 
-void MusicApp::updateStateFromKnob(PB_SmartKnobState state)
+EntityStateUpdate MusicApp::updateStateFromKnob(PB_SmartKnobState state)
 {
     current_volume_position = state.current_position;
     current_volume = current_volume_position * 5;
@@ -37,6 +37,7 @@ void MusicApp::updateStateFromKnob(PB_SmartKnobState state)
     // needed to next reload of App
     motor_config.position_nonce = current_volume_position;
     motor_config.position = current_volume_position;
+    return EntityStateUpdate{};
 }
 
 void MusicApp::updateStateFromSystem(AppState state) {}

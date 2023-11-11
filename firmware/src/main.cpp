@@ -18,12 +18,14 @@ static MotorTask motor_task(1, config);
 
 #if SK_NETWORKING
 static NetworkingTask networking_task(1);
+static NetworkingTask *networking_task_p = &networking_task;
 
 #else
+static NetworkingTask *networking_task_p = nullptr;
 
 #endif
 
-AppTask app_task(0, motor_task, display_task_p);
+AppTask app_task(0, motor_task, display_task_p, networking_task_p);
 
 void setup()
 {

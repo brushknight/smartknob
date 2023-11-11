@@ -7,17 +7,6 @@
 const uint32_t APP_ID_SETTINGS = 7;
 const uint32_t APP_ID_HOME_ASSISTANT = 6;
 
-struct AppConfig
-{
-    std::string name;
-    uint32_t ui_id; // for linking with display renderer
-    int32_t current_position;
-    int32_t last_position;
-    int32_t positions_count; // max positions count
-
-    PB_SmartKnobConfig motor_config;
-};
-
 struct ConnectivityState
 {
     bool is_connected;
@@ -36,11 +25,13 @@ struct ConnectivityState
 
 struct AppState
 {
-    // std::string name;
-    // uint32_t ui_id; // for linking with display renderer
-    // int32_t current_position;
-    // int32_t positions_count; // max positions count
-
     PB_SmartKnobState motor_state;
     ConnectivityState connectivity_state;
+};
+
+struct EntityStateUpdate
+{
+    std::string entity_name;
+    float new_value = 0;
+    bool changed = false;
 };

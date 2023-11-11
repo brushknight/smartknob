@@ -36,7 +36,7 @@ uint8_t ClimateApp::navigationNext()
     return 0;
 }
 
-void ClimateApp::updateStateFromKnob(PB_SmartKnobState state)
+EntityStateUpdate ClimateApp::updateStateFromKnob(PB_SmartKnobState state)
 {
     wanted_temperature = state.current_position;
 
@@ -54,6 +54,7 @@ void ClimateApp::updateStateFromKnob(PB_SmartKnobState state)
     {
         adjusted_sub_position = logf(1 + state.sub_position_unit * motor_config.position_width_radians / 5 / PI * 180) * 5 * PI / 180;
     }
+    return EntityStateUpdate{};
 }
 
 void ClimateApp::updateStateFromSystem(AppState state) {}

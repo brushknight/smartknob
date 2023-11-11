@@ -5,6 +5,7 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <vector>
+#include <mqtt.h>
 
 #include "logger.h"
 #include "proto_gen/smartknob.pb.h"
@@ -19,7 +20,9 @@ public:
     NetworkingTask(const uint8_t task_core);
     ~NetworkingTask();
 
-    QueueHandle_t getKnobStateQueue();
+    QueueHandle_t getEntityStateReceivedQueue();
+
+    void enqueueEntityStateToSend(EntityStateUpdate);
 
     void setLogger(Logger *logger);
     void addStateListener(QueueHandle_t queue);
@@ -28,7 +31,8 @@ protected:
     void run();
 
 private:
-    QueueHandle_t knob_state_queue_;
+    QueueHandle_t entity_state_to_send_queue_;
+    QueueHandle_t entity_state_received_queue_;
 
     std::vector<QueueHandle_t> state_listeners_;
 
@@ -39,6 +43,11 @@ private:
     WiFiClient wifi_client;
     void setup_wifi();
     void publishState(const ConnectivityState &state);
+    Mqtt *mqtt;
+
+    const char *mqtt_topic_integration = "smartknob/integration";
+    const char *mqtt_to_knob = "smartknob/to_knob";
+    const char *mqtt_to_hass = "smartknob/to_hass";
 };
 
 #else

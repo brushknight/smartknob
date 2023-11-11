@@ -26,7 +26,7 @@ public:
     //     spr_->fillCircle(TFT_WIDTH / 2, TFT_HEIGHT / 2, 10, TFT_RED);
     //     // return spr_;
     // }
-    virtual void updateStateFromKnob(PB_SmartKnobState state);
+    virtual EntityStateUpdate updateStateFromKnob(PB_SmartKnobState state);
     virtual void updateStateFromSystem(AppState state);
 
     PB_SmartKnobConfig getMotorConfig()

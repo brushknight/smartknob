@@ -29,7 +29,7 @@ uint8_t LightSwitchApp::navigationNext()
     return 0;
 }
 
-void LightSwitchApp::updateStateFromKnob(PB_SmartKnobState state)
+EntityStateUpdate LightSwitchApp::updateStateFromKnob(PB_SmartKnobState state)
 {
     current_position = state.current_position;
     sub_position_unit = state.sub_position_unit;
@@ -47,6 +47,8 @@ void LightSwitchApp::updateStateFromKnob(PB_SmartKnobState state)
     {
         adjusted_sub_position = logf(1 + sub_position_unit * motor_config.position_width_radians / 5 / PI * 180) * 5 * PI / 180;
     }
+
+    return EntityStateUpdate{};
 }
 
 void LightSwitchApp::updateStateFromSystem(AppState state) {}

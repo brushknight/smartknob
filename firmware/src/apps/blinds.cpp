@@ -27,13 +27,14 @@ uint8_t BlindsApp::navigationNext()
     return 0;
 }
 
-void BlindsApp::updateStateFromKnob(PB_SmartKnobState state)
+EntityStateUpdate BlindsApp::updateStateFromKnob(PB_SmartKnobState state)
 {
     current_closed_position = state.current_position;
 
     // needed to next reload of App
     motor_config.position_nonce = current_closed_position;
     motor_config.position = current_closed_position;
+    return EntityStateUpdate{};
 }
 
 void BlindsApp::updateStateFromSystem(AppState state) {}

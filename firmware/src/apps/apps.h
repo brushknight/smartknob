@@ -11,7 +11,7 @@ class Apps
 public:
     Apps();
     void add(uint8_t id, App *app);
-    void update(AppState state);
+    EntityStateUpdate update(AppState state);
     TFT_eSprite *renderActive();
     void setActive(uint8_t id);
     uint8_t navigationNext();

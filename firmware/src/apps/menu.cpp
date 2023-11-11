@@ -102,7 +102,7 @@ MenuApp::MenuApp(TFT_eSprite *spr_) : App(spr_)
         });
 }
 
-void MenuApp::updateStateFromKnob(PB_SmartKnobState state)
+EntityStateUpdate MenuApp::updateStateFromKnob(PB_SmartKnobState state)
 {
     // TODO: cache menu size
 
@@ -118,6 +118,8 @@ void MenuApp::updateStateFromKnob(PB_SmartKnobState state)
     }
 
     current_menu_position = position_for_menu_calc % items.size();
+
+    return EntityStateUpdate{};
 }
 
 void MenuApp::updateStateFromSystem(AppState state) {}

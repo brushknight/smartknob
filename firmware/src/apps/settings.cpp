@@ -31,7 +31,7 @@ uint8_t SettingsApp::navigationNext()
     return 0;
 }
 
-void SettingsApp::updateStateFromKnob(PB_SmartKnobState state)
+EntityStateUpdate SettingsApp::updateStateFromKnob(PB_SmartKnobState state)
 {
     current_position = state.current_position;
 
@@ -49,6 +49,8 @@ void SettingsApp::updateStateFromKnob(PB_SmartKnobState state)
     {
         adjusted_sub_position = logf(1 + state.sub_position_unit * motor_config.position_width_radians / 5 / PI * 180) * 5 * PI / 180;
     }
+
+    return EntityStateUpdate{};
 }
 
 void SettingsApp::updateStateFromSystem(AppState state)

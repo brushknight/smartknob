@@ -20,7 +20,7 @@ class MenuApp : public App
 public:
     MenuApp(TFT_eSprite *spr_);
     TFT_eSprite *render();
-    void updateStateFromKnob(PB_SmartKnobState state);
+    EntityStateUpdate updateStateFromKnob(PB_SmartKnobState state);
     void updateStateFromSystem(AppState state);
 
     void add_item(uint8_t id, MenuItem item);

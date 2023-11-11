@@ -1,9 +1,9 @@
 #include "3d_printer_chamber.h"
 
-PrinterChamberApp::PrinterChamberApp(TFT_eSprite *spr_) : App(spr_)
+PrinterChamberApp::PrinterChamberApp(TFT_eSprite *spr_, std::string hass_entity_name) : App(spr_)
 {
     current_temperature = 30;
-
+    this->entity_name = entity_name;
     uint8_t min_temp = 0;
     uint8_t max_temp = 120;
     float segment_size = 230.0 / 21.0 * PI / 180;
@@ -35,7 +35,7 @@ uint8_t PrinterChamberApp::navigationNext()
     return 0;
 }
 
-void PrinterChamberApp::updateStateFromKnob(PB_SmartKnobState state)
+EntityStateUpdate PrinterChamberApp::updateStateFromKnob(PB_SmartKnobState state)
 {
     wanted_temperature_position = state.current_position;
     wanted_temperature = wanted_temperature_position * 5;
@@ -43,6 +43,19 @@ void PrinterChamberApp::updateStateFromKnob(PB_SmartKnobState state)
     // needed to next reload of App
     motor_config.position_nonce = wanted_temperature_position;
     motor_config.position = wanted_temperature_position;
+
+    EntityStateUpdate new_state;
+
+    new_state.entity_name = entity_name;
+    new_state.new_value = wanted_temperature * 1.0;
+
+    if (last_wanted_temperature != wanted_temperature)
+    {
+        last_wanted_temperature = wanted_temperature;
+        new_state.changed = true;
+    }
+
+    return new_state;
 }
 
 void PrinterChamberApp::updateStateFromSystem(AppState state) {}

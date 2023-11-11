@@ -49,7 +49,7 @@ private:
 
     QueueHandle_t app_state_queue_;
 
-    AppConfig app_state_;
+    AppState app_state_;
     SemaphoreHandle_t mutex_;
     uint16_t brightness_;
     Logger *logger_;
