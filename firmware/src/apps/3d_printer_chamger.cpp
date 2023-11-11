@@ -1,6 +1,6 @@
 #include "3d_printer_chamber.h"
 
-PrinterChamberApp::PrinterChamberApp(TFT_eSprite *spr_, std::string hass_entity_name) : App(spr_)
+PrinterChamberApp::PrinterChamberApp(TFT_eSprite *spr_, std::string entity_name) : App(spr_)
 {
     current_temperature = 30;
     this->entity_name = entity_name;

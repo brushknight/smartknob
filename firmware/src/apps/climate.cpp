@@ -2,11 +2,13 @@
 
 #include "music.h"
 
-ClimateApp::ClimateApp(TFT_eSprite *spr_) : App(spr_)
+ClimateApp::ClimateApp(TFT_eSprite *spr_, std::string entity_name) : App(spr_)
 {
     // TODO update this via some API
     current_temperature = 22;
     wanted_temperature = 25;
+
+    this->entity_name = entity_name;
 
     // TODO, sync motor config with wanted temp on retrival
 
@@ -54,7 +56,19 @@ EntityStateUpdate ClimateApp::updateStateFromKnob(PB_SmartKnobState state)
     {
         adjusted_sub_position = logf(1 + state.sub_position_unit * motor_config.position_width_radians / 5 / PI * 180) * 5 * PI / 180;
     }
-    return EntityStateUpdate{};
+
+    EntityStateUpdate new_state;
+
+    new_state.entity_name = entity_name;
+    new_state.new_value = wanted_temperature * 1.0;
+
+    if (last_wanted_temperature != wanted_temperature)
+    {
+        last_wanted_temperature = wanted_temperature;
+        new_state.changed = true;
+    }
+
+    return new_state;
 }
 
 void ClimateApp::updateStateFromSystem(AppState state) {}

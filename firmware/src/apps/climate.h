@@ -7,7 +7,7 @@
 class ClimateApp : public App
 {
 public:
-    ClimateApp(TFT_eSprite *spr_);
+    ClimateApp(TFT_eSprite *spr_, std::string entity_name);
     TFT_eSprite *render();
     EntityStateUpdate updateStateFromKnob(PB_SmartKnobState state);
     void updateStateFromSystem(AppState state);
@@ -16,7 +16,9 @@ public:
 private:
     uint8_t current_temperature = 0;
     uint8_t wanted_temperature = 0;
+    uint8_t last_wanted_temperature = 0;
     uint8_t num_positions;
+    std::string entity_name;
 
     // needed for UI
     float adjusted_sub_position = 0;

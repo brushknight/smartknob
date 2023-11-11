@@ -69,7 +69,7 @@ void DisplayTask::run()
 
   MenuApp *menu_app = new MenuApp(&spr_);
   MusicApp *music_app = new MusicApp(&spr_);
-  ClimateApp *climate_app = new ClimateApp(&spr_);
+  ClimateApp *climate_app = new ClimateApp(&spr_, "kitchen_climate");
   BlindsApp *blinds_app = new BlindsApp(&spr_);
   SettingsApp *settings_app = new SettingsApp(&spr_);
   LightDimmerApp *light_dimmer_app = new LightDimmerApp(&spr_);

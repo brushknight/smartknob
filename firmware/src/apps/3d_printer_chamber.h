@@ -7,7 +7,7 @@
 class PrinterChamberApp : public App
 {
 public:
-    PrinterChamberApp(TFT_eSprite *spr_, std::string hass_entity_name);
+    PrinterChamberApp(TFT_eSprite *spr_, std::string entity_name);
     TFT_eSprite *render();
     EntityStateUpdate updateStateFromKnob(PB_SmartKnobState state);
     void updateStateFromSystem(AppState state);
