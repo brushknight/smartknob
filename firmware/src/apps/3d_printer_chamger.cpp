@@ -53,6 +53,7 @@ EntityStateUpdate PrinterChamberApp::updateStateFromKnob(PB_SmartKnobState state
     {
         last_wanted_temperature = wanted_temperature;
         new_state.changed = true;
+        sprintf(new_state.app_slug, "%s", APP_SLUG_3D_PRINTER);
     }
 
     return new_state;

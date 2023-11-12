@@ -66,6 +66,7 @@ EntityStateUpdate ClimateApp::updateStateFromKnob(PB_SmartKnobState state)
     {
         last_wanted_temperature = wanted_temperature;
         new_state.changed = true;
+        sprintf(new_state.app_slug, "%s", APP_SLUG_CLIMATE);
     }
 
     return new_state;

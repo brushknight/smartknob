@@ -1,15 +1,14 @@
+// co-authored by carlhampuswall
+
 #ifndef mqtt_h
 #define mqtt_h
 
-// #include <Arduino.h>
 #include <WiFi.h>
-//  #include <wifi_setup.h>
 #include <PubSubClient.h>
 
 class Mqtt
 {
 public:
-  // typedef
   Mqtt(const char *server, uint16_t port, const char *clientname, const char *username, const char *password);
   static void callback(char *topic, byte *payload, unsigned int length);
   void reconnect();

@@ -1,3 +1,5 @@
+// co-authored by carlhampuswall
+
 #include "mqtt.h"
 // char* _server;
 // char* _clientname;
@@ -32,11 +34,10 @@ void Mqtt::reconnect()
 {
   while (!mqttClient.connected())
   {
-    ESP_LOGD(TAG, "Attempting connection %s %s %s", _clientname, _username, _password);
+    ESP_LOGI(TAG, "Attempting connection %s %s %s", _clientname, _username, _password);
 
     if (mqttClient.connect(_clientname, _username, _password))
-    { //
-      // Serial.println("Connected");
+    {
       ESP_LOGI(TAG, "Connected");
 
       mqttClient.subscribe("smartknob/output");
@@ -52,17 +53,15 @@ void Mqtt::reconnect()
 
 void Mqtt::callback(char *topic, byte *payload, unsigned int length)
 {
-  // Serial.print("Message received on topic: ");
-  // Serial.print(topic);
-  // Serial.print(". Message: ");
+  ESP_LOGD(TAG, "Message received on topic: %s, payload: %s", topic, payload);
   String payloadTemp;
 
   for (int i = 0; i < length; i++)
   {
-    // Serial.print((char)payload[i]);
+
     payloadTemp += (char)payload[i];
   }
-  // Serial.println();
+  ESP_LOGD(TAG, "payload as string: %s", payloadTemp);
 }
 
 void Mqtt::publish(const char *topic, const char *payload)

@@ -1,9 +1,10 @@
 #include "music.h"
 
-MusicApp::MusicApp(TFT_eSprite *spr_) : App(spr_)
+MusicApp::MusicApp(TFT_eSprite *spr_, std::string entity_name) : App(spr_)
 {
     sprintf(author, "%s", "Beethoven");
     sprintf(track, "%s", "Moonlight Sonata");
+    this->entity_name = entity_name;
 
     motor_config = PB_SmartKnobConfig{
         0,
@@ -37,7 +38,20 @@ EntityStateUpdate MusicApp::updateStateFromKnob(PB_SmartKnobState state)
     // needed to next reload of App
     motor_config.position_nonce = current_volume_position;
     motor_config.position = current_volume_position;
-    return EntityStateUpdate{};
+
+    EntityStateUpdate new_state;
+
+    new_state.entity_name = entity_name;
+    new_state.new_value = current_volume * 1.0;
+
+    if (last_volume != current_volume)
+    {
+        last_volume = current_volume;
+        new_state.changed = true;
+        sprintf(new_state.app_slug, "%s", APP_SLUG_MUSIC);
+    }
+
+    return new_state;
 }
 
 void MusicApp::updateStateFromSystem(AppState state) {}

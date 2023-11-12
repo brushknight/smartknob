@@ -1,3 +1,5 @@
+// co-authored by carlhampuswall
+
 #if SK_NETWORKING
 #include "networking_task.h"
 #include "semaphore_guard.h"
@@ -121,7 +123,7 @@ void NetworkingTask::run()
 
             if (entity_state_to_send.changed)
             {
-                sprintf(buf_, "{\"entity_id\": \"%s\", \"new_value\": %.2f}", entity_state_to_send.entity_name.c_str(), entity_state_to_send.new_value);
+                sprintf(buf_, "{\"entity_id\": \"%s\", \"app_slug\": \"%s\", \"new_value\": %.2f}", entity_state_to_send.entity_name.c_str(), entity_state_to_send.app_slug, entity_state_to_send.new_value);
 
                 mqtt->publish(mqtt_to_hass, buf_);
 

@@ -1,9 +1,10 @@
 #include "light_dimmer.h"
 
-LightDimmerApp::LightDimmerApp(TFT_eSprite *spr_) : App(spr_)
+LightDimmerApp::LightDimmerApp(TFT_eSprite *spr_, std::string entity_name) : App(spr_)
 {
     // sprintf(author, "%s", "Beethoven");
     // sprintf(track, "%s", "Moonlight Sonata");
+    this->entity_name = entity_name;
 
     motor_config = PB_SmartKnobConfig{
         0,
@@ -48,7 +49,19 @@ EntityStateUpdate LightDimmerApp::updateStateFromKnob(PB_SmartKnobState state)
         adjusted_sub_position = logf(1 + sub_position_unit * motor_config.position_width_radians / 5 / PI * 180) * 5 * PI / 180;
     }
 
-    return EntityStateUpdate{};
+    EntityStateUpdate new_state;
+
+    new_state.entity_name = entity_name;
+    new_state.new_value = current_position * 1.0;
+
+    if (last_position != current_position)
+    {
+        last_position = current_position;
+        new_state.changed = true;
+        sprintf(new_state.app_slug, "%s", APP_SLUG_LIGHT_DIMMER);
+    }
+
+    return new_state;
 }
 
 void LightDimmerApp::updateStateFromSystem(AppState state) {}

@@ -33,5 +33,6 @@ struct EntityStateUpdate
 {
     std::string entity_name;
     float new_value = 0;
+    char app_slug[48] = "";
     bool changed = false;
 };

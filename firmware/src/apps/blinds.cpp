@@ -1,7 +1,8 @@
 #include "blinds.h"
 
-BlindsApp::BlindsApp(TFT_eSprite *spr_) : App(spr_)
+BlindsApp::BlindsApp(TFT_eSprite *spr_, std::string entity_name) : App(spr_)
 {
+    this->entity_name = entity_name;
 
     motor_config = PB_SmartKnobConfig{
         15,
@@ -34,7 +35,20 @@ EntityStateUpdate BlindsApp::updateStateFromKnob(PB_SmartKnobState state)
     // needed to next reload of App
     motor_config.position_nonce = current_closed_position;
     motor_config.position = current_closed_position;
-    return EntityStateUpdate{};
+
+    EntityStateUpdate new_state;
+
+    new_state.entity_name = entity_name;
+    new_state.new_value = current_closed_position * 5.0; // 5 percent per position
+
+    if (last_closed_position != current_closed_position)
+    {
+        last_closed_position = current_closed_position;
+        new_state.changed = true;
+        sprintf(new_state.app_slug, "%s", APP_SLUG_BLINDS);
+    }
+
+    return new_state;
 }
 
 void BlindsApp::updateStateFromSystem(AppState state) {}
@@ -54,7 +68,6 @@ TFT_eSprite *BlindsApp::render()
     spr_->fillRect(0, height - 10, TFT_WIDTH, 10, shade_bar_color);
 
     spr_->setFreeFont(&Roboto_Light_60);
-    char buf_[6];
 
     uint16_t center = TFT_WIDTH / 2;
 

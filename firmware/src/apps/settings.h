@@ -21,7 +21,6 @@ private:
     ConnectivityState connectivity_state;
     char room[24];
     char fw_version[24];
-
     // needed for UI
     float adjusted_sub_position = 0;
 };
