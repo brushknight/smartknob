@@ -5,6 +5,7 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <vector>
+#include <map>
 #include <mqtt.h>
 
 #include "logger.h"

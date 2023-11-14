@@ -2,7 +2,7 @@
 
 MenuApp::MenuApp(TFT_eSprite *spr_) : App(spr_)
 {
-    sprintf(room, "%s", "Kitchen");
+    sprintf(room, "%s", "Office");
 
     motor_config = PB_SmartKnobConfig{
         0,
@@ -64,7 +64,7 @@ MenuApp::MenuApp(TFT_eSprite *spr_) : App(spr_)
     add_item(
         4,
         MenuItem{
-            "Countertop",
+            "Workbench",
             4, // TODO: make a const
             spr_->color565(249, 165, 44),
             light_top_40,

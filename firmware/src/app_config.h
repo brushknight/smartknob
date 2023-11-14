@@ -35,4 +35,5 @@ struct EntityStateUpdate
     float new_value = 0;
     char app_slug[48] = "";
     bool changed = false;
+    bool sent = false;
 };

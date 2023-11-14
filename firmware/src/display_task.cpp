@@ -72,8 +72,8 @@ void DisplayTask::run()
   ClimateApp *climate_app = new ClimateApp(&spr_, "kitchen_climate");
   BlindsApp *blinds_app = new BlindsApp(&spr_, "office_blinds");
   SettingsApp *settings_app = new SettingsApp(&spr_);
-  LightDimmerApp *light_dimmer_app = new LightDimmerApp(&spr_, "office_ceiling");
-  LightSwitchApp *light_switch_app = new LightSwitchApp(&spr_, "office_table");
+  LightDimmerApp *light_dimmer_app = new LightDimmerApp(&spr_, "light.hue_ensis_up_1");
+  LightSwitchApp *light_switch_app = new LightSwitchApp(&spr_, "light.hue_ensis_down_1");
   PrinterChamberApp *printer_chamber_app = new PrinterChamberApp(&spr_, "3d_printer");
 
   apps.add(0, menu_app);

@@ -22,6 +22,8 @@ LightDimmerApp::LightDimmerApp(TFT_eSprite *spr_, std::string entity_name) : App
         0,
         27,
     };
+
+    num_positions = motor_config.max_position - motor_config.min_position;
 }
 
 uint8_t LightDimmerApp::navigationNext()
@@ -101,13 +103,24 @@ TFT_eSprite *LightDimmerApp::render()
     float start_angle = left_bound;
     float wanted_angle = right_bound;
 
+    wanted_angle = left_bound - (range_radians / num_positions) * (current_position - motor_config.min_position) - adjusted_sub_position - motor_config.position_width_radians;
+    if (wanted_angle < right_bound - motor_config.position_width_radians)
+    {
+        wanted_angle = right_bound - motor_config.position_width_radians;
+    }
+
+    if (wanted_angle > left_bound)
+    {
+        wanted_angle = left_bound;
+    }
+
     if (current_position == 0)
     {
         spr_->fillRect(0, 0, TFT_WIDTH, TFT_HEIGHT, off_background);
         spr_->drawBitmap(center_h - icon_size / 2, center_v - icon_size / 2 - offset_vertical, lamp_regular, icon_size, icon_size, off_lamp_color, off_background);
         spr_->setTextColor(off_lamp_color);
         spr_->setFreeFont(&Roboto_Thin_24);
-        spr_->drawString("Kitchen", center_h, center_v + icon_size / 2 + 30 - offset_vertical, 1);
+        spr_->drawString("Workbench", center_h, center_v + icon_size / 2 + 30 - offset_vertical, 1);
         spr_->drawString("off", center_h, center_v + icon_size / 2 + 60 - offset_vertical, 1);
 
         // draw dot movong path
@@ -122,7 +135,7 @@ TFT_eSprite *LightDimmerApp::render()
         spr_->drawBitmap(center_h - icon_size / 2, center_v - icon_size / 2 - offset_vertical, lamp_solid, icon_size, icon_size, on_lamp_color, on_background);
         spr_->setTextColor(on_lamp_color);
         spr_->setFreeFont(&Roboto_Thin_24);
-        spr_->drawString("Kitchen", center_h, center_v + icon_size / 2 + 30 - offset_vertical, 1);
+        spr_->drawString("Workbench", center_h, center_v + icon_size / 2 + 30 - offset_vertical, 1);
         spr_->drawString(buf_, center_h, center_v + icon_size / 2 + 60 - offset_vertical, 1);
 
         // draw dot movong path
@@ -131,11 +144,6 @@ TFT_eSprite *LightDimmerApp::render()
             spr_->fillCircle(TFT_WIDTH / 2 + (screen_radius - 10) * cosf(r), TFT_HEIGHT / 2 - (screen_radius - 10) * sinf(r), 10, DISABLED_COLOR);
         }
 
-        wanted_angle = left_bound - (range_radians / num_positions) * (current_position - motor_config.min_position) - adjusted_sub_position - motor_config.position_width_radians;
-        if (wanted_angle < right_bound - motor_config.position_width_radians)
-        {
-            wanted_angle = right_bound - motor_config.position_width_radians;
-        }
         for (float r = start_angle; r >= wanted_angle; r -= 2 * PI / 180)
         {
             spr_->fillCircle(TFT_WIDTH / 2 + (screen_radius - 10) * cosf(r), TFT_HEIGHT / 2 - (screen_radius - 10) * sinf(r), 10, on_lamp_color);

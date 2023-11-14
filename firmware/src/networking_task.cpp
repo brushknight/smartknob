@@ -10,7 +10,7 @@ NetworkingTask::NetworkingTask(const uint8_t task_core) : Task{"Networking", 204
 {
     mutex_ = xSemaphoreCreateMutex();
 
-    entity_state_to_send_queue_ = xQueueCreate(10, sizeof(EntityStateUpdate));
+    entity_state_to_send_queue_ = xQueueCreate(50, sizeof(EntityStateUpdate));
     assert(entity_state_to_send_queue_ != NULL);
     assert(mutex_ != NULL);
 }
@@ -61,12 +61,18 @@ void NetworkingTask::run()
 {
     // connect to wifi first
 
+    const uint16_t mqtt_push_interval_ms = 200;
+
     setup_wifi();
     static uint32_t last_wifi_status;
 
     static uint32_t mqtt_pull;
+    static uint32_t mqtt_push; // to prevent spam
 
-    EntityStateUpdate entity_state_to_send;
+    std::map<std::string, EntityStateUpdate> entity_states_to_send;
+
+    EntityStateUpdate entity_state_to_process_;
+
     char buf_[128];
     while (1)
     {
@@ -116,20 +122,47 @@ void NetworkingTask::run()
 
         // push to the queue;
 
-        if (xQueueReceive(entity_state_to_send_queue_, &entity_state_to_send, 0) == pdTRUE)
+        if (xQueueReceive(entity_state_to_send_queue_, &entity_state_to_process_, 0) == pdTRUE)
         {
-            // do nothing yet
-            // log("new connectivity state recieved");
 
-            if (entity_state_to_send.changed)
+            if (entity_state_to_process_.changed)
             {
-                sprintf(buf_, "{\"entity_id\": \"%s\", \"app_slug\": \"%s\", \"new_value\": %.2f}", entity_state_to_send.entity_name.c_str(), entity_state_to_send.app_slug, entity_state_to_send.new_value);
+                char buf_[128];
+                sprintf(buf_,
+                        "%s_%s",
+                        entity_state_to_process_.entity_name.c_str(),
+                        entity_state_to_process_.app_slug);
 
-                mqtt->publish(mqtt_to_hass, buf_);
+                entity_states_to_send[buf_] = entity_state_to_process_;
 
-                sprintf(buf_, "%s -> %.2f", entity_state_to_send.entity_name.c_str(), entity_state_to_send.new_value);
-                log(buf_);
+                // entity_states_to_send.insert(std::make_pair(buf_, entity_state_to_process_));
             }
+        }
+
+        if (millis() - mqtt_push > mqtt_push_interval_ms)
+        {
+
+            // iterate over all items in the map and push all not pushed yet
+            for (auto i : entity_states_to_send)
+            {
+                if (!entity_states_to_send[i.first].sent)
+                {
+                    sprintf(buf_,
+                            "{\"entity_id\": \"%s\", \"app_slug\": \"%s\", \"new_value\": %.2f}",
+                            entity_states_to_send[i.first].entity_name.c_str(),
+                            entity_states_to_send[i.first].app_slug,
+                            entity_states_to_send[i.first].new_value);
+
+                    mqtt->publish(mqtt_to_hass, buf_);
+
+                    entity_states_to_send[i.first].sent = true;
+
+                    // sprintf(buf_, "%s -> %.2f", entity_state_to_send.entity_name.c_str(), entity_state_to_send.new_value);
+                    log(buf_);
+                }
+            }
+
+            mqtt_push = millis();
         }
 
         delay(5);
