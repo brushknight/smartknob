@@ -1,3 +1,5 @@
+# ⚠️⚠️⚠️ IBOM is not updated for my variant of the PCB, don't order blindly ⚠️⚠️⚠️
+
 # SmartKnob
 SmartKnob is an open-source input device with software-configurable endstops and virtual detents.
 
