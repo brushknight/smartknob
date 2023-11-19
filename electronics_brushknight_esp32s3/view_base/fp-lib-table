@@ -15,4 +15,6 @@
   (lib (name "cp2102")(type "KiCad")(uri "${KIPRJMOD}/../lib/cp2102.pretty")(options "")(descr ""))
   (lib (name "cleaned footprints")(type "KiCad")(uri "${KIPRJMOD}/lib/cleaned footprints.pretty")(options "")(descr ""))
   (lib (name "screen_connector")(type "KiCad")(uri "${KIPRJMOD}/lib/view_custom.pretty/screen_connector.pretty")(options "")(descr ""))
+  (lib (name "smd_clean")(type "KiCad")(uri "${KIPRJMOD}/../lib/smd_clean.pretty")(options "")(descr ""))
+  (lib (name "stemmaqt")(type "KiCad")(uri "C:/Users/brushknight/dev/brushknight/smartknob/electronics_brushknight_esp32s3/lib/stemmaqt")(options "")(descr ""))
 )
