@@ -244,7 +244,7 @@
         (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
       (tstamp c395b315-24e6-4143-8217-c7ffe514ffed)
     )
-    (fp_text value "GC9A01" (at 0 0.5 90) (layer "B.Fab")
+    (fp_text value "GC9A01" (at 0 0.5 90) (layer "B.Fab") hide
         (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
       (tstamp 18698e63-f66c-4594-a5e7-825c966ec165)
     )
@@ -690,15 +690,15 @@
     (property "ki_keywords" "connector")
     (path "/48b4a23c-032f-465b-afe5-595c0f8297c9")
     (attr smd)
-    (fp_text reference "J6" (at 7.975 0.85 135 unlocked) (layer "B.SilkS")
+    (fp_text reference "J6" (at 7.975 0.85 135 unlocked) (layer "B.SilkS") hide
         (effects (font (size 1 1) (thickness 0.1)) (justify mirror))
       (tstamp 804a59b0-26e1-4ff1-8045-3f9ac519c402)
     )
-    (fp_text value "LCD - FPC" (at 7.975 -0.65 135 unlocked) (layer "B.Fab")
+    (fp_text value "LCD - FPC" (at 7.975 -0.65 135 unlocked) (layer "B.Fab") hide
         (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
       (tstamp cab19be2-9f74-4b14-9954-e6108b2ee0c1)
     )
-    (fp_text user "${REFERENCE}" (at 7.975 -2.15 135 unlocked) (layer "B.Fab")
+    (fp_text user "${REFERENCE}" (at 7.975 -2.15 135 unlocked) (layer "B.Fab") hide
         (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
       (tstamp 69caf0b4-e6f4-4774-a634-710b5b65d2a6)
     )
@@ -836,7 +836,7 @@
   (gr_text "+" (at 108.9 90) (layer "B.SilkS") (tstamp 79761916-1b06-4b97-9972-765863c8e3e0)
     (effects (font (size 1 1) (thickness 0.15)) (justify mirror))
   )
-  (gr_text "Screen PCB\n${RELEASE_VERSION}" (at 117 99.6) (layer "B.SilkS") (tstamp 7ff67d66-8179-4fd9-a7ca-33229139ea5c)
+  (gr_text "Screen PCB\n" (at 117 98.75) (layer "B.SilkS") (tstamp 7ff67d66-8179-4fd9-a7ca-33229139ea5c)
     (effects (font (size 1 1) (thickness 0.1)) (justify left mirror))
   )
   (gr_text "C" (at 91.1 90) (layer "B.SilkS") (tstamp abf8647d-c5a4-4d40-b5d0-03a4c5191e68)
