@@ -56,7 +56,11 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [],
+      "drc_exclusions": [
+        "silk_over_copper|106400000|116285093|baf1955b-6681-4a86-aa9e-3d3a086c1f0c|3481639a-8366-42d1-8849-c12d7cd54694",
+        "silk_over_copper|92999777|100182112|00000000-0000-0000-0000-0000620c0c43|c8c2fa70-d291-4070-8098-e10360210c12",
+        "silk_over_copper|94300000|116545391|baf1955b-6681-4a86-aa9e-3d3a086c1f0c|42adbe47-7f38-4bdc-b671-33cfe182fd3c"
+      ],
       "meta": {
         "filename": "board_design_settings.json",
         "version": 2
@@ -177,12 +181,18 @@
       ],
       "track_widths": [
         0.0,
+        0.15,
+        0.25,
         0.4
       ],
       "via_dimensions": [
         {
           "diameter": 0.0,
           "drill": 0.0
+        },
+        {
+          "diameter": 0.5,
+          "drill": 0.3
         }
       ],
       "zones_allow_external_fillets": false,
