@@ -68,21 +68,17 @@ void DisplayTask::run()
   spr_.setTextColor(0xFFFF, TFT_BLACK);
 
   MenuApp *menu_app = new MenuApp(&spr_);
-  MusicApp *music_app = new MusicApp(&spr_, "offise_sonos");
-  ClimateApp *climate_app = new ClimateApp(&spr_, "kitchen_climate");
-  BlindsApp *blinds_app = new BlindsApp(&spr_, "office_blinds");
   SettingsApp *settings_app = new SettingsApp(&spr_);
-  LightDimmerApp *light_dimmer_app = new LightDimmerApp(&spr_, "light.hue_ensis_up_1");
-  LightSwitchApp *light_switch_app = new LightSwitchApp(&spr_, "light.hue_ensis_down_1");
-  PrinterChamberApp *printer_chamber_app = new PrinterChamberApp(&spr_, "3d_printer");
+
+  apps.setSprite(&spr_);
 
   apps.add(0, menu_app);
-  apps.add(1, printer_chamber_app);
-  apps.add(2, climate_app);
-  apps.add(3, blinds_app);
-  apps.add(4, light_switch_app);
-  apps.add(5, light_dimmer_app);
-  apps.add(6, music_app);
+  apps.loadApp(1, APP_SLUG_3D_PRINTER, "3d_printer", "3D Printer");
+  apps.loadApp(2, APP_SLUG_CLIMATE, "climate.kitchen", "Kitchen");
+  apps.loadApp(3, APP_SLUG_BLINDS, "blinds.kitchen", "Kitchen");
+  apps.loadApp(4, APP_SLUG_LIGHT_DIMMER, "light.hue_ensis_up_1", "Workbench");
+  apps.loadApp(5, APP_SLUG_LIGHT_SWITCH, "light.hue_ensis_up_1", "Ceiling");
+  apps.loadApp(6, APP_SLUG_MUSIC, "offise_sonos", "Spotify");
   apps.add(7, settings_app);
 
   AppState app_state;

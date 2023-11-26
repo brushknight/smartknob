@@ -40,7 +40,8 @@ void Mqtt::reconnect()
     {
       ESP_LOGI(TAG, "Connected");
 
-      mqttClient.subscribe("smartknob/output");
+      mqttClient.subscribe("smartknob/init");
+      mqttClient.subscribe("smartknob/to_knob");
     }
     else
     {

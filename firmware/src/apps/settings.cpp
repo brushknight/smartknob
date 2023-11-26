@@ -55,7 +55,12 @@ EntityStateUpdate SettingsApp::updateStateFromKnob(PB_SmartKnobState state)
 
 void SettingsApp::updateStateFromSystem(AppState state)
 {
-    connectivity_state = state.connectivity_state;
+    connectivity_state.ip_address = state.connectivity_state.ip_address;
+    connectivity_state.is_connected = state.connectivity_state.is_connected;
+    connectivity_state.signal_strength = state.connectivity_state.signal_strength;
+    connectivity_state.signal_strenth_status = state.connectivity_state.signal_strenth_status;
+    connectivity_state.ssid = state.connectivity_state.ssid;
+
     // current_volume = current_volume_position * 5;
 
     // // needed to next reload of App
@@ -141,7 +146,7 @@ TFT_eSprite *SettingsApp::render()
             break;
         }
 
-        char buf_[24];
+        char buf_[48];
 
         if (connectivity_state.is_connected)
         {

@@ -11,17 +11,17 @@
 #include "task.h"
 #include "app_config.h"
 
-#include "apps/icons.h"
+// #include "apps/icons.h"
 #include "apps/apps.h"
 
-#include "apps/menu.h"
-#include "apps/music.h"
-#include "apps/climate.h"
-#include "apps/blinds.h"
-#include "apps/settings.h"
-#include "apps/light_dimmer.h"
-#include "apps/light_switch.h"
-#include "apps/3d_printer_chamber.h"
+// #include "apps/menu.h"
+// #include "apps/music.h"
+// #include "apps/climate.h"
+// #include "apps/blinds.h"
+// #include "apps/settings.h"
+// #include "apps/light_dimmer.h"
+// #include "apps/light_switch.h"
+// #include "apps/3d_printer_chamber.h"
 
 class DisplayTask : public Task<DisplayTask>
 {

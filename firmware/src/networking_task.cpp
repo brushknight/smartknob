@@ -54,6 +54,7 @@ void NetworkingTask::setup_wifi()
 
     log("starting MQTT client");
     mqtt = new Mqtt(mqtt_host, mqtt_port, "smartknob", mqtt_user, mqtt_pass);
+    // TODO - refine this init message
     mqtt->publish(mqtt_topic_integration, "{\"message\": \"Hello from SmartKnob\"}");
 }
 

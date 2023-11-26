@@ -1,3 +1,4 @@
+#pragma once
 #include "app.h"
 
 // #include "font/roboto_thin_bold_24.h"
