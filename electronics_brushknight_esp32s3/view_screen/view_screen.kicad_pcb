@@ -684,6 +684,7 @@
   (footprint "screen_connector:Amphenol FCI FPC 8 pin 0.5 pitch" (layer "B.Cu")
     (tstamp 2bb5d327-96e1-4332-8632-4b374574b09b)
     (at 90.177297 109.762043 -45)
+    (property "Mouser" "649-59453081110EDHLF")
     (property "Sheetfile" "view_screen.kicad_sch")
     (property "Sheetname" "")
     (property "ki_description" "Generic connector, single row, 01x08, script generated (kicad-library-utils/schlib/autogen/connector/)")
