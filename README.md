@@ -1,4 +1,28 @@
-# ⚠️⚠️⚠️ IBOM is not updated for my variant of the PCB, don't order blindly ⚠️⚠️⚠️
+# SmartKnob by @brushknight
+
+This is my own rework of the project. You can find electronics and mechanical design files in the [./electronics_brushknight_esp32s3](./electronics_brushknight_esp32s3)
+
+[Discord community](https://discord.gg/yaKKRzte3R)
+
+## List of hardware changes (yet not merged #4)
+- esp32s3-n16r8-u
+- 72 addressable ec15 leds in the ring
+- Proximity sensor based on ToF VL53L0X
+- 8 conductos 0.5mm pitch FPC calbe to drive screen
+- reset and boot buttons
+- 7 additional GPIOs on the back side
+- 3 stemma qt connectors onthe back for i2c modules
+
+## List of software changes (yet not merged #3)
+- support for new hardware
+- WiFi and MQTT
+- apps and menu concept
+
+## Updated ibom (yet in progress)
+[base PCB]()
+[screen PCB]()
+
+# ⬇️⬇️⬇️ Original project readme below ⬇️⬇️⬇️
 
 # SmartKnob
 SmartKnob is an open-source input device with software-configurable endstops and virtual detents.
