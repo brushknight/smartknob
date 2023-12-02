@@ -4,7 +4,7 @@ This is my own rework of the project. You can find electronics and mechanical de
 
 [Discord community](https://discord.gg/yaKKRzte3R)
 
-## List of hardware changes (yet not merged #4)
+## List of hardware changes
 - esp32s3-n16r8-u
 - 72 addressable ec15 leds in the ring
 - Proximity sensor based on ToF VL53L0X
@@ -18,9 +18,9 @@ This is my own rework of the project. You can find electronics and mechanical de
 - WiFi and MQTT
 - apps and menu concept
 
-## Updated ibom (yet in progress)
-[base PCB]()
-[screen PCB]()
+## Updated ibom
+[base PCB](https://github.com/brushknight/smartknob/releases/download/devkit_v0.1/base_ibom.html)
+[screen PCB](https://github.com/brushknight/smartknob/releases/download/devkit_v0.1/screen_ibom.html)
 
 # ⬇️⬇️⬇️ Original project readme below ⬇️⬇️⬇️
 
