@@ -1,9 +1,6 @@
 (fp_lib_table
-  (version 7)
-  (lib (name "Holes")(type "KiCad")(uri "${KIPRJMOD}/../lib/Holes.pretty")(options "")(descr ""))
-  (lib (name "Modified")(type "KiCad")(uri "${KIPRJMOD}/../lib/Modified.pretty")(options "")(descr ""))
-  (lib (name "SolderPads")(type "KiCad")(uri "${KIPRJMOD}/../lib/SolderPads.pretty")(options "")(descr ""))
-  (lib (name "LCD_GC9A01")(type "KiCad")(uri "${KIPRJMOD}/../lib/LCD_GC9A01.pretty")(options "")(descr ""))
-  (lib (name "view_custom")(type "KiCad")(uri "${KIPRJMOD}/../view_base/lib/view_custom.pretty")(options "")(descr ""))
-  (lib (name "screen_connector")(type "KiCad")(uri "${KIPRJMOD}/../view_base/lib/view_custom.pretty/screen_connector.pretty")(options "")(descr ""))
+  (lib (name Holes)(type KiCad)(uri ${KIPRJMOD}/../lib/Holes.pretty)(options "")(descr ""))
+  (lib (name Modified)(type KiCad)(uri ${KIPRJMOD}/../lib/Modified.pretty)(options "")(descr ""))
+  (lib (name SolderPads)(type KiCad)(uri ${KIPRJMOD}/../lib/SolderPads.pretty)(options "")(descr ""))
+  (lib (name LCD_GC9A01)(type KiCad)(uri ${KIPRJMOD}/../lib/LCD_GC9A01.pretty)(options "")(descr ""))
 )

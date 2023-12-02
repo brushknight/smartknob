@@ -7,6 +7,6 @@
   (lib (name "strain")(type "Legacy")(uri "${KIPRJMOD}/../lib/strain.lib")(options "")(descr ""))
   (lib (name "Trinamic")(type "Legacy")(uri "${KIPRJMOD}/../lib/Trinamic.lib")(options "")(descr ""))
   (lib (name "VEML7700")(type "Legacy")(uri "${KIPRJMOD}/../lib/VEML7700.lib")(options "")(descr ""))
-  (lib (name "ESP32-S3-WROOM-1-N8R8")(type "KiCad")(uri "${KIPRJMOD}/../lib/ESP32-S3-WROOM-1-N8R8.kicad_sym")(options "")(descr ""))
-  (lib (name "CP2102N-A02-GQFN28")(type "Legacy")(uri "${KIPRJMOD}/../lib/CP2102N-A02-GQFN28.lib")(options "")(descr ""))
+  (lib (name "ESP32-S3-WROOM-1-N8R8")(type "KiCad")(uri "C:/Users/brushknight/dev/brushknight/smartknob/electronics/lib/ESP32-S3-WROOM-1-N8R8.kicad_sym")(options "")(descr ""))
+  (lib (name "CP2102N-A02-GQFN28")(type "Legacy")(uri "C:/Users/brushknight/dev/brushknight/smartknob/electronics/lib/CP2102N-A02-GQFN28.lib")(options "")(descr ""))
 )
