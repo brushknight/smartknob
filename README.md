@@ -4,7 +4,7 @@ This is my own rework of the project. You can find electronics and mechanical de
 
 [Discord community](https://discord.gg/yaKKRzte3R)
 
-## List of changes for hardware
+## List of hardware changes (yet not merged #4)
 - esp32s3-n16r8-u
 - 72 addressable ec15 leds in the ring
 - Proximity sensor based on ToF VL53L0X
@@ -18,7 +18,7 @@ This is my own rework of the project. You can find electronics and mechanical de
 - WiFi and MQTT
 - apps and menu concept
 
-## Updated ibom
+## Updated ibom (yet in progress)
 [base PCB]()
 [screen PCB]()
 
