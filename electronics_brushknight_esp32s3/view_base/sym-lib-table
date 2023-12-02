@@ -1,0 +1,12 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "MagnTek")(type "Legacy")(uri "${KIPRJMOD}/../lib/MagnTek.lib")(options "")(descr ""))
+  (lib (name "SK6812")(type "Legacy")(uri "${KIPRJMOD}/../lib/SK6812.lib")(options "")(descr ""))
+  (lib (name "no_pin")(type "Legacy")(uri "${KIPRJMOD}/../lib/no_pin.lib")(options "")(descr ""))
+  (lib (name "lilygo_micro32")(type "Legacy")(uri "${KIPRJMOD}/../lib/lilygo_micro32.lib")(options "")(descr ""))
+  (lib (name "strain")(type "Legacy")(uri "${KIPRJMOD}/../lib/strain.lib")(options "")(descr ""))
+  (lib (name "Trinamic")(type "Legacy")(uri "${KIPRJMOD}/../lib/Trinamic.lib")(options "")(descr ""))
+  (lib (name "VEML7700")(type "Legacy")(uri "${KIPRJMOD}/../lib/VEML7700.lib")(options "")(descr ""))
+  (lib (name "ESP32-S3-WROOM-1-N8R8")(type "KiCad")(uri "C:/Users/brushknight/dev/brushknight/smartknob/electronics/lib/ESP32-S3-WROOM-1-N8R8.kicad_sym")(options "")(descr ""))
+  (lib (name "CP2102N-A02-GQFN28")(type "Legacy")(uri "C:/Users/brushknight/dev/brushknight/smartknob/electronics/lib/CP2102N-A02-GQFN28.lib")(options "")(descr ""))
+)
