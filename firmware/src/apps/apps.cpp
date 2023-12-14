@@ -3,6 +3,7 @@
 #include "menu.h"
 
 #include <typeinfo>
+#include <iterator>
 
 Apps::Apps()
 {
@@ -26,6 +27,13 @@ void Apps::add(uint8_t id, App *app)
     // ESP_LOGD("apps.cpp", ">>> inserted menu App");
 
     // apps.insert(apps.begin() + id, std::move(app), std::move(app));
+    unlock();
+}
+
+void Apps::clear()
+{
+    lock();
+    apps.clear();
     unlock();
 }
 
@@ -69,9 +77,44 @@ void Apps::setActive(uint8_t id)
     unlock();
 }
 
+void Apps::updateMenu()
+{
+    // re - generate new menu based on loaded apps
+    MenuApp *menu_app = new MenuApp(spr_);
+
+    std::map<std::string, std::shared_ptr<App>>::iterator it;
+
+    uint16_t position = 0;
+
+    for (it = apps.begin(); it != apps.end(); it++)
+    {
+        ESP_LOGD("apps.cpp", "menu add item %d", position);
+
+        menu_app->add_item(
+            position,
+            MenuItem{
+                it->second->friendly_name,
+                1,
+                spr_->color565(0, 255, 200),
+                it->second->small_icon,
+                it->second->big_icon,
+            });
+
+        position++;
+    }
+
+    add(0, menu_app);
+}
+
 // settings and menu apps kept aside for a reason. We will add them manually later
 void Apps::loadApp(uint8_t position, std::string app_slug, std::string entity_id, char entity_name[32])
 {
+    if (position < 1)
+    {
+        ESP_LOGE("apps.cpp", "can't load app at %d %s %s %s", position, app_slug.c_str(), entity_id.c_str(), entity_name);
+        return;
+    }
+
     ESP_LOGD("apps.cpp", "loading app %d %s %s %s", position, app_slug.c_str(), entity_id.c_str(), entity_name);
     if (app_slug.compare(APP_SLUG_CLIMATE) == 0)
     {
@@ -108,6 +151,10 @@ void Apps::loadApp(uint8_t position, std::string app_slug, std::string entity_id
         MusicApp *app = new MusicApp(this->spr_, entity_id);
         add(position, app);
         ESP_LOGD("apps.cpp", "added app %d %s %s %s", position, app_slug.c_str(), entity_id.c_str(), entity_name);
+    }
+    else
+    {
+        ESP_LOGE("apps.cpp", "can't find app with slug '%s'", app_slug);
     }
 }
 

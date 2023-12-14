@@ -20,6 +20,10 @@ BlindsApp::BlindsApp(TFT_eSprite *spr_, std::string entity_name) : App(spr_)
         0,
         27,
     };
+
+    big_icon = shades_80;
+    small_icon = shades_40;
+    friendly_name = "Shades";
 }
 
 uint8_t BlindsApp::navigationNext()

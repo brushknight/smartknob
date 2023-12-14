@@ -24,6 +24,10 @@ LightDimmerApp::LightDimmerApp(TFT_eSprite *spr_, std::string entity_name) : App
     };
 
     num_positions = motor_config.max_position - motor_config.min_position;
+
+    big_icon = light_top_80;
+    small_icon = light_top_40;
+    friendly_name = "Lights";
 }
 
 uint8_t LightDimmerApp::navigationNext()

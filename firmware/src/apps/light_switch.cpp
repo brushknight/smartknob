@@ -22,6 +22,11 @@ LightSwitchApp::LightSwitchApp(TFT_eSprite *spr_, std::string entity_name) : App
         0,
         27,
     };
+
+    friendly_name = "Lights";
+
+    big_icon = light_switch_80;
+    small_icon = light_switch_40;
 }
 
 uint8_t LightSwitchApp::navigationNext()

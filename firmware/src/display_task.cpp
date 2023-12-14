@@ -3,6 +3,7 @@
 #include "semaphore_guard.h"
 #include "util.h"
 
+#include "cJSON.h"
 // #include "networking_task.h"
 
 #include "font/roboto_light_60.h"
@@ -67,19 +68,41 @@ void DisplayTask::run()
   }
   spr_.setTextColor(0xFFFF, TFT_BLACK);
 
-  MenuApp *menu_app = new MenuApp(&spr_);
   SettingsApp *settings_app = new SettingsApp(&spr_);
+
+  std::string apps_config = "[{\"app_slug\":\"light_switch\",\"entity_id\":\"light.ceiling\",\"friendly_name\":\"Ceiling\",\"area\":\"Kitchen\",\"menu_color\":\"#ffffff\"},{\"app_slug\":\"light_dimmer\",\"entity_id\":\"light.workbench\",\"friendly_name\":\"Workbench\",\"area\":\"Kitchen\",\"menu_color\":\"#ffffff\"},{\"app_slug\":\"thermostat\",\"entity_id\":\"climate.office\",\"friendly_name\":\"Climate\",\"area\":\"Office\",\"menu_color\":\"#ffffff\"},{\"app_slug\":\"3d_printer\",\"entity_id\":\"3d_printer.office\",\"friendly_name\":\"3D Printer\",\"area\":\"Office\",\"menu_color\":\"#ffffff\"},{\"app_slug\":\"blinds\",\"entity_id\":\"blinds.office\",\"friendly_name\":\"Shades\",\"area\":\"Office\",\"menu_color\":\"#ffffff\"},{\"app_slug\":\"music\",\"entity_id\":\"music.office\",\"friendly_name\":\"Music\",\"area\":\"Office\",\"menu_color\":\"#ffffff\"}]";
+
+  cJSON *json_root = cJSON_Parse(apps_config.c_str());
+
+  if (json_root == NULL)
+  {
+    ESP_LOGE("display_task.cpp", "failed to parse JSON");
+  }
 
   apps.setSprite(&spr_);
 
-  apps.add(0, menu_app);
-  apps.loadApp(1, APP_SLUG_3D_PRINTER, "3d_printer", "3D Printer");
-  apps.loadApp(2, APP_SLUG_CLIMATE, "climate.kitchen", "Kitchen");
-  apps.loadApp(3, APP_SLUG_BLINDS, "blinds.kitchen", "Kitchen");
-  apps.loadApp(4, APP_SLUG_LIGHT_DIMMER, "light.hue_ensis_up_1", "Workbench");
-  apps.loadApp(5, APP_SLUG_LIGHT_SWITCH, "light.hue_ensis_up_1", "Ceiling");
-  apps.loadApp(6, APP_SLUG_MUSIC, "offise_sonos", "Spotify");
-  apps.add(7, settings_app);
+  cJSON *json_app = NULL;
+
+  uint16_t app_position = 1;
+
+  cJSON_ArrayForEach(json_app, json_root)
+  {
+    cJSON *json_app_slug = cJSON_GetObjectItemCaseSensitive(json_app, "app_slug");
+    cJSON *json_entity_id = cJSON_GetObjectItemCaseSensitive(json_app, "entity_id");
+    cJSON *json_friendly_name = cJSON_GetObjectItemCaseSensitive(json_app, "friendly_name");
+    snprintf(buf_, sizeof(buf_), "fromJSON > app_slug=%s", json_app_slug->valuestring);
+    log(buf_);
+    // ESP_LOGD("display_task.cpp", "%s", buf_);
+
+    apps.loadApp(app_position, std::string(json_app_slug->valuestring), std::string(json_entity_id->valuestring), json_friendly_name->valuestring);
+
+    app_position++;
+  }
+
+  apps.add(app_position, settings_app);
+
+  // generate menu from apps list
+  apps.updateMenu();
 
   AppState app_state;
 

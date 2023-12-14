@@ -9,7 +9,7 @@ const uint8_t MEX_MENU_ITEMS = 12;
 
 struct MenuItem
 {
-    char screen_name[SCREEN_NAME_LENGTH];
+    const char *screen_name;
     uint16_t app_id;
     uint32_t color;
     const unsigned char *small_icon;

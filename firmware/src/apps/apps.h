@@ -21,6 +21,7 @@ class Apps
 public:
     Apps();
     void add(uint8_t id, App *app);
+    void clear();
     EntityStateUpdate update(AppState state);
     TFT_eSprite *renderActive();
     void setActive(uint8_t id);
@@ -28,6 +29,7 @@ public:
     PB_SmartKnobConfig getActiveMotorConfig();
     void setSprite(TFT_eSprite *spr_);
     void loadApp(uint8_t position, std::string app_slug, std::string entity_id, char entity_name[32]);
+    void updateMenu();
 
 private:
     QueueHandle_t mutex;

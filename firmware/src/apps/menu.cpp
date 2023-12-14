@@ -21,85 +21,85 @@ MenuApp::MenuApp(TFT_eSprite *spr_) : App(spr_)
         200,
     };
 
-    add_item(
-        0,
-        MenuItem{
-            "3D printer",
-            1, // TODO: make a const
-            spr_->color565(0, 255, 200),
-            printer_40,
-            printer_80,
-        });
+    // add_item(
+    //     0,
+    //     MenuItem{
+    //         "3D printer",
+    //         1, // TODO: make a const
+    //         spr_->color565(0, 255, 200),
+    //         printer_40,
+    //         printer_80,
+    //     });
 
-    add_item(
-        1,
-        MenuItem{
-            "Climate",
-            1, // TODO: make a const
-            spr_->color565(255, 128, 0),
-            hvac_40,
-            hvac_80,
-        });
+    // add_item(
+    //     1,
+    //     MenuItem{
+    //         "Climate",
+    //         1, // TODO: make a const
+    //         spr_->color565(255, 128, 0),
+    //         hvac_40,
+    //         hvac_80,
+    //     });
 
-    add_item(
-        2,
-        MenuItem{
-            "Shades",
-            2, // TODO: make a const
-            spr_->color565(66, 149, 245),
-            shades_40,
-            shades_80,
-        });
+    // add_item(
+    //     2,
+    //     MenuItem{
+    //         "Shades",
+    //         2, // TODO: make a const
+    //         spr_->color565(66, 149, 245),
+    //         shades_40,
+    //         shades_80,
+    //     });
 
-    add_item(
-        3,
-        MenuItem{
-            "Ceiling",
-            3, // TODO: make a const
-            spr_->color565(239, 223, 72),
-            light_switch_40,
-            light_switch_80,
-        });
+    // add_item(
+    //     3,
+    //     MenuItem{
+    //         "Ceiling",
+    //         3, // TODO: make a const
+    //         spr_->color565(239, 223, 72),
+    //         light_switch_40,
+    //         light_switch_80,
+    //     });
 
-    add_item(
-        4,
-        MenuItem{
-            "Workbench",
-            4, // TODO: make a const
-            spr_->color565(249, 165, 44),
-            light_top_40,
-            light_top_80,
-        });
+    // add_item(
+    //     4,
+    //     MenuItem{
+    //         "Workbench",
+    //         4, // TODO: make a const
+    //         spr_->color565(249, 165, 44),
+    //         light_top_40,
+    //         light_top_80,
+    //     });
 
-    add_item(
-        5,
-        MenuItem{
-            "Music",
-            5, // TODO: make a const
-            spr_->color565(30, 215, 96),
-            spotify_40,
-            spotify_80,
-        });
+    // add_item(
+    //     5,
+    //     MenuItem{
+    //         "Music",
+    //         5, // TODO: make a const
+    //         spr_->color565(30, 215, 96),
+    //         spotify_40,
+    //         spotify_80,
+    //     });
+
+    // // add_item(
+    // //     6,
+    // //     MenuItem{
+    // //         "Home Assistant",
+    // //         1, // TODO: make a const
+    // //         spr_->color565(24, 188, 242),
+    // //         home_assistant_40,
+    // //         home_assistant_80,
+    // //     });
 
     // add_item(
     //     6,
     //     MenuItem{
-    //         "Home Assistant",
+    //         "Settings",
     //         1, // TODO: make a const
-    //         spr_->color565(24, 188, 242),
-    //         home_assistant_40,
-    //         home_assistant_80,
+    //         spr_->color565(155, 95, 224),
+    //         settings_40,
+    //         settings_80,
     //     });
-
-    add_item(
-        6,
-        MenuItem{
-            "Settings",
-            1, // TODO: make a const
-            spr_->color565(155, 95, 224),
-            settings_40,
-            settings_80,
-        });
 }
 
 EntityStateUpdate MenuApp::updateStateFromKnob(PB_SmartKnobState state)
@@ -141,6 +141,8 @@ TFT_eSprite *MenuApp::render()
 
     // current_menu_position = 0;
 
+    // ESP_LOGD("menu.cpp", "pre-render");
+
     MenuItem current_item = find_item(current_menu_position);
     MenuItem prev_item;
     MenuItem next_item;
@@ -159,9 +161,9 @@ TFT_eSprite *MenuApp::render()
         prev_item = find_item(current_menu_position - 1);
         next_item = find_item(current_menu_position + 1);
     }
-
+    // ESP_LOGD("menu.cpp", "mid-render");
     render_menu_screen(current_item, prev_item, next_item);
-
+    // ESP_LOGD("menu.cpp", "post-render");
     return this->spr_;
 }
 
@@ -211,6 +213,7 @@ void MenuApp::render_menu_screen(MenuItem current, MenuItem prev, MenuItem next)
     spr_->drawString(room, center_h, label_vertical_offset + room_lable_h / 2 - 1, 1);
 
     spr_->drawBitmap(center_h - icon_size_active / 2, center_v - icon_size_active / 2, current.big_icon, icon_size_active, icon_size_active, color_active, background);
+    // ESP_LOGD("menu.cpp", "%s", current.screen_name);
 
     // left one
     spr_->drawBitmap(center_h - icon_size_active / 2 - 20 - icon_size_inactive, center_v - icon_size_inactive / 2, prev.small_icon, icon_size_inactive, icon_size_inactive, color_inactive, background);

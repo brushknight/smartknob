@@ -54,6 +54,7 @@ private:
     uint16_t brightness_;
     Logger *logger_;
     void log(const char *msg);
+    char buf_[128];
 };
 
 #else

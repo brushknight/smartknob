@@ -22,6 +22,10 @@ MusicApp::MusicApp(TFT_eSprite *spr_, std::string entity_name) : App(spr_)
         0,
         90,
     };
+
+    big_icon = spotify_80;
+    small_icon = spotify_40;
+    friendly_name = "Music";
 }
 
 uint8_t MusicApp::navigationNext()

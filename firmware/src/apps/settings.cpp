@@ -23,6 +23,11 @@ SettingsApp::SettingsApp(TFT_eSprite *spr_) : App(spr_)
     };
 
     num_positions = motor_config.max_position - motor_config.min_position;
+
+    // set icons for menu
+    big_icon = settings_80;
+    small_icon = settings_40;
+    friendly_name = "Settings";
 }
 
 uint8_t SettingsApp::navigationNext()

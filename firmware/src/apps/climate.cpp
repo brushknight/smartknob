@@ -30,6 +30,10 @@ ClimateApp::ClimateApp(TFT_eSprite *spr_, std::string entity_name) : App(spr_)
     };
 
     num_positions = motor_config.max_position - motor_config.min_position;
+
+    big_icon = hvac_80;
+    small_icon = hvac_40;
+    friendly_name = "Climate";
 }
 
 uint8_t ClimateApp::navigationNext()

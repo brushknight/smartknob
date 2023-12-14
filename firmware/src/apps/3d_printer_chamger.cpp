@@ -27,6 +27,10 @@ PrinterChamberApp::PrinterChamberApp(TFT_eSprite *spr_, std::string entity_name)
     };
 
     num_positions = motor_config.max_position - motor_config.min_position;
+
+    big_icon = printer_80;
+    small_icon = printer_40;
+    friendly_name = "3D Printer";
 }
 
 uint8_t PrinterChamberApp::navigationNext()
