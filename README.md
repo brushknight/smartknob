@@ -79,9 +79,6 @@ Either way, if you have any questions, feel free to drop by our [Discord server]
 
 ### License <a name="license"></a>
 
-
-Your text provides a clear explanation of the licensing terms for Seedlabs' open hardware ecosystem. Here's a proofread version for enhanced clarity and grammatical accuracy:
-
 A more detailed license can be found in the license file.
 
 In this paragraph, we aim to present a layman's version of the spirit behind it. Our goal is to enable as many contributions as possible to the Seedlabs ecosystem of open hardware. Additionally, we want to preserve the spirit behind the original project (Apache V2, Creative Commons Attribution) and all the libraries that have been used in this codebase.
