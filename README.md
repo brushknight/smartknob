@@ -1,3 +1,6 @@
+# ⚠️⚠️⚠️ This repo is archived, check for updates at [@seedlabs-it](https://github.com/seedLabs-it/) 
+
+
 # SmartKnob
 SmartKnob is an open-source input device with software-configurable endstops and virtual detents.
 
